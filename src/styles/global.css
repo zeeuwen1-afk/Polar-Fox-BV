@@ -111,6 +111,12 @@
     outline-color: var(--lime);
   }
 
+  /* Licht vlak binnen een donker vlak: focusring weer ink. */
+  .on-paper :focus-visible,
+  .on-paper:focus-visible {
+    outline-color: var(--ink);
+  }
+
   ::selection {
     background: var(--lime);
     color: var(--ink);

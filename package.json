@@ -24,10 +24,13 @@
     "worker:dev": "wrangler dev --config worker/wrangler.toml",
     "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
     "deploy": "npm run build && npm run worker:deploy",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lighthouse:desktop": "lhci autorun --collect.settings.preset=desktop",
+    "og-image": "node scripts/og-image.mjs"
   },
   "dependencies": {
     "@astrojs/react": "7.0.0",
+    "@astrojs/sitemap": "3.7.4",
     "@fontsource-variable/space-grotesk": "5.3.0",
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.3.5",

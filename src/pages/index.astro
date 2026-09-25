@@ -14,6 +14,7 @@ import { homeFaq } from '../content/faq';
 import { lowestMonthly } from '../content/packages';
 import { copy, marqueeItems, site } from '../content/site';
 import { formatEuro } from '../lib/pricing';
+import { faqJsonLd } from '../lib/jsonld';
 
 const stackCards = [
   {
@@ -79,6 +80,7 @@ const homeSteps = [
   title={`${site.name} | ${copy.promise} ${copy.promiseMark}`}
   titleIsFull
   description={site.description}
+  jsonLd={[faqJsonLd(homeFaq)]}
 >
   <!-- 1. Hero -->
   <section class="container-site pt-12 pb-8 md:pt-20">

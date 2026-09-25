@@ -6,6 +6,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../content/site';
+import { organizationJsonLd } from '../lib/jsonld';
 
 /**
  * Basislayout voor elke pagina: metadata, skiplink, header, main en footer.
@@ -36,6 +37,7 @@ const {
 const fullTitle = titleIsFull ? title : `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', site.url);
 const ogImageUrl = new URL(ogImage, site.url);
+const allJsonLd = [organizationJsonLd(), ...jsonLd];
 ---
 
 <!doctype html>
@@ -57,6 +59,7 @@ const ogImageUrl = new URL(ogImage, site.url);
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Polar Fox: Maatwerk software. Vast bedrag." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
@@ -72,7 +75,7 @@ const ogImageUrl = new URL(ogImage, site.url);
 
     <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
 
-    {jsonLd.map((data) => (
+    {allJsonLd.map((data) => (
       <script type="application/ld+json" is:inline set:html={JSON.stringify(data)} />
     ))}
     <slot name="head" />

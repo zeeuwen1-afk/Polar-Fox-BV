@@ -123,7 +123,7 @@ export default function FeatureSwitches({ mobileVisible = 5 }: FeatureSwitchesPr
       </div>
 
       <div
-        className="card-lg self-start bg-lime p-6 shadow-hard-lg-pink md:p-8"
+        className="card-lg on-paper self-start bg-lime p-6 text-ink shadow-hard-lg-pink md:p-8"
         aria-live="polite"
         data-testid="feature-result"
       >

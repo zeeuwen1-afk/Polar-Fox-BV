@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 // Productiedomein. Wordt gebruikt voor canonical-URL's, sitemap en Open Graph.
 const SITE = 'https://polarfoxbv.nl';
@@ -12,7 +13,13 @@ export default defineConfig({
   trailingSlash: 'never',
   // Nette URL's zonder .html: /prijzen -> dist/prijzen/index.html
   build: { format: 'directory' },
-  integrations: [react()],
+  integrations: [
+    react(),
+    sitemap({
+      // Demo-pagina's en de inlogpagina (noindex) horen niet in de sitemap.
+      filter: (page) => !page.includes('/dev/') && !page.endsWith('/inloggen'),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

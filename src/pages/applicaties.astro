@@ -5,6 +5,7 @@ import PackageGrid from '../components/PackageGrid.astro';
 import AppExplorer from '../islands/AppExplorer';
 import { lowestMonthly, lowestStart, packages } from '../content/packages';
 import { formatEuro } from '../lib/pricing';
+import { serviceJsonLd } from '../lib/jsonld';
 
 const fromMonthly = formatEuro(lowestMonthly('apps'));
 const fromStart = formatEuro(lowestStart('apps'));
@@ -35,6 +36,7 @@ const integrations = [
 ---
 
 <BaseLayout
+  jsonLd={[serviceJsonLd(packages.apps, '/applicaties')]}
   title="Applicaties"
   description={`Maatwerk applicaties vanaf ${fromMonthly} per maand excl. btw: klantportalen, boekingssystemen, dashboards en ledenomgevingen. Gebouwd, gehost en beheerd door één partner.`}
 >

@@ -8,11 +8,13 @@ import TotalCalculator from '../islands/TotalCalculator';
 import { alwaysIncluded, packageGroups, packages } from '../content/packages';
 import { copy } from '../content/site';
 import { formatEuro } from '../lib/pricing';
+import { serviceJsonLd } from '../lib/jsonld';
 
 const { hourlyRate, tenHourCard } = packages.extras;
 ---
 
 <BaseLayout
+  jsonLd={packageGroups.map((group) => serviceJsonLd(group, '/prijzen'))}
   title="Prijzen"
   description="Vaste maandbedragen voor websites, applicaties en beheer, excl. btw. Startbijdrage plus maandbedrag, alles inbegrepen: bouw, hosting, onderhoud en uren."
 >

@@ -71,7 +71,12 @@ const toneClass = { pink: 'bg-pink', sun: 'bg-sun', paper: 'bg-paper' } as const
     <h2 id="misgaat">
       Als er iets <span class="mark-pink">misgaat.</span>
     </h2>
-    <div class="mt-8 overflow-x-auto">
+    <div
+      class="mt-8 overflow-x-auto"
+      tabindex="0"
+      role="region"
+      aria-label="Tabel met reactietijden"
+    >
       <table class="w-full min-w-[640px] border-separate border-spacing-0 overflow-hidden rounded-[18px] border-[3px] border-ink text-left">
         <thead>
           <tr class="bg-ink text-paper">

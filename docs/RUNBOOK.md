@@ -66,7 +66,28 @@ Vanaf fase 8 deployt GitHub Actions automatisch bij een merge op `main`. Handmat
 npm run deploy       # build + wrangler deploy
 ```
 
-## Headercontrole (fase 6)
+## Kwaliteitsscores
+
+### Lighthouse (25 september 2026, lokale productie-build)
+
+Drempel in `lighthouserc.cjs`: elke categorie minimaal 95. Gemeten op zeven pagina's, mobiel en desktop.
+
+| Pagina                                                   | Prestaties | Toegankelijkheid | Best practices | SEO |
+| -------------------------------------------------------- | ---------- | ---------------- | -------------- | --- |
+| /, /applicaties, /websites, /prijzen, /cases, /werkwijze | 100        | 100              | 100            | 100 |
+| /intake                                                  | 100        | 100              | 96             | 100 |
+
+Lokaal draaien: `npm run lighthouse` (mobiel) of `npm run lighthouse:desktop`. Op Windows faalt
+chrome-launcher soms met een EPERM op zijn tijdelijke profielmap; gebruik dan
+`powershell -File scripts/lighthouse-local.ps1` (met `-Desktop` voor het desktop-profiel). Astro
+staat één preview-server per project toe; als Lighthouse niet kan starten: `npx astro preview stop`.
+
+### axe (toegankelijkheid)
+
+`npm run test:e2e` draait axe-core (WCAG 2.1 A en AA) op elke pagina, desktop en mobiel, met nul
+toegestane overtredingen. Laatste run: 25 september 2026, 28 van 28 groen.
+
+### Headercontrole
 
 Na livegang: score van Mozilla Observatory (of securityheaders.com) hier noteren met datum.
 

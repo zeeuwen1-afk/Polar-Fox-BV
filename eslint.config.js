@@ -29,8 +29,8 @@ export default defineConfig(
     languageOptions: { globals: { ...globals.browser } },
   },
   {
-    files: ['scripts/**/*.{js,mjs}', '*.config.{js,mjs,ts}'],
-    languageOptions: { globals: { ...globals.node } },
+    files: ['scripts/**/*.{js,mjs}', '*.config.{js,mjs,ts}', '*.cjs'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
   {
     files: ['worker/**/*.ts'],
@@ -40,6 +40,13 @@ export default defineConfig(
   ...tseslint.configs.stylistic,
   ...astro.configs.recommended,
   ...astro.configs['jsx-a11y-strict'],
+  {
+    files: ['**/*.astro'],
+    rules: {
+      // Een tabpanel of scrollbare region hoort tabIndex=0 te hebben.
+      'astro/jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel', 'region'] }],
+    },
+  },
   {
     // React-islands: strikte a11y-regels, want elke component moet WCAG 2.1 AA halen.
     files: ['**/*.tsx'],

@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+// Zod compileert parsers standaard met `new Function`; dat blokkeert de CSP
+// (geen 'unsafe-eval'). Jitless is iets trager, maar hier verwaarloosbaar.
+z.config({ jitless: true });
+
 /**
  * Validatie van een intake-aanvraag. Gedeeld door de IntakeWizard (client)
  * en de Worker (server), zodat beide dezelfde regels hanteren.
