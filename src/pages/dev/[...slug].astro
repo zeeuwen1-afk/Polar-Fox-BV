@@ -1,0 +1,131 @@
+---
+/**
+ * Demo-pagina's per island, alleen in development. In productie geeft
+ * getStaticPaths een lege lijst, dus /dev/* bestaat niet in de build.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CardStack from '../../islands/CardStack';
+import FeatureSwitches from '../../islands/FeatureSwitches';
+import WorkflowCards from '../../islands/WorkflowCards';
+import ExitToggle from '../../islands/ExitToggle';
+import FlipCards from '../../islands/FlipCards';
+import SlotPicker from '../../islands/SlotPicker';
+import AppExplorer from '../../islands/AppExplorer';
+import DevicePreview from '../../islands/DevicePreview';
+import BillingToggle from '../../islands/BillingToggle';
+import Accordion from '../../islands/Accordion';
+import TotalCalculator from '../../islands/TotalCalculator';
+import CaseTabs from '../../islands/CaseTabs';
+import StepTimeline from '../../islands/StepTimeline';
+import IntakeWizard from '../../islands/IntakeWizard';
+import MobileMenu from '../../islands/MobileMenu';
+import { cases } from '../../content/cases';
+import { homeFaq, websiteFaq } from '../../content/faq';
+import { lowestMonthly, processSteps } from '../../content/packages';
+import { navigation } from '../../content/site';
+import { formatEuro, yearlyMonthly } from '../../lib/pricing';
+import { devDemos as demos } from '../../lib/devDemos';
+
+export function getStaticPaths() {
+  if (import.meta.env.PROD) return [];
+  return [{ params: { slug: undefined } }, ...demos.map((slug) => ({ params: { slug } }))];
+}
+
+const { slug } = Astro.params;
+const stackCards = [
+  {
+    id: 'apps',
+    title: 'Applicaties',
+    price: `vanaf ${formatEuro(lowestMonthly('apps'))} p/m`,
+    href: '/applicaties',
+    tone: 'lime',
+    description: 'Klantportalen, boekingen, dashboards.',
+  },
+  {
+    id: 'web',
+    title: 'Websites',
+    price: `vanaf ${formatEuro(lowestMonthly('websites'))} p/m`,
+    href: '/websites',
+    tone: 'pink',
+    description: 'Snel, vindbaar, zelf te beheren.',
+  },
+  {
+    id: 'beheer',
+    title: 'Beheer',
+    price: `vanaf ${formatEuro(lowestMonthly('beheer'))} p/m`,
+    href: '/prijzen',
+    tone: 'sky',
+    description: 'Hosting, updates en bewaking.',
+  },
+] as const;
+const homeSteps = processSteps.slice(0, 4);
+const firstCase = cases[0];
+---
+
+<BaseLayout
+  title={`Dev: ${slug ?? 'overzicht'}`}
+  description="Demo-pagina's voor componenten."
+  noindex
+>
+  <section class="container-site py-10">
+    <p class="sticker tilt-n2 bg-sun">Alleen in development</p>
+    <h1 class="mt-4 text-5xl">Componenten{slug ? `: ${slug}` : ''}</h1>
+    <nav aria-label="Componenten" class="mt-6 flex flex-wrap gap-2">
+      {demos.map((name) => (
+        <a
+          href={`/dev/${name}`}
+          class:list={['sticker tilt-0', name === slug ? 'bg-lime' : 'bg-paper']}
+        >
+          {name}
+        </a>
+      ))}
+    </nav>
+
+    <div class="mt-12">
+      {slug === 'cardstack' && <CardStack client:load cards={stackCards} />}
+      {slug === 'featureswitches' && (
+        <div class="card-lg bg-ink p-8">
+          <FeatureSwitches client:load />
+        </div>
+      )}
+      {slug === 'workflowcards' && <WorkflowCards client:load steps={homeSteps} />}
+      {slug === 'exittoggle' && <ExitToggle client:load />}
+      {slug === 'flipcards' && <FlipCards client:load items={homeFaq} />}
+      {slug === 'slotpicker' && (
+        <div class="card-lg bg-pink p-8">
+          <SlotPicker client:load />
+        </div>
+      )}
+      {slug === 'appexplorer' && <AppExplorer client:load />}
+      {slug === 'devicepreview' && <DevicePreview client:load />}
+      {slug === 'billingtoggle' && (
+        <div>
+          <BillingToggle client:load />
+          <p class="mt-6 text-2xl font-bold">
+            Website Groei:
+            <span class="price-monthly">{formatEuro(189)} p/m</span>
+            <span class="price-yearly">{formatEuro(yearlyMonthly(189))} p/m</span>
+          </p>
+        </div>
+      )}
+      {slug === 'accordion' && <Accordion client:load items={websiteFaq} />}
+      {slug === 'totalcalculator' && <TotalCalculator client:load />}
+      {slug === 'casetabs' && firstCase && (
+        <div class="card-lg bg-lime p-8">
+          <CaseTabs client:load tabs={firstCase.tabs} name={firstCase.name} />
+        </div>
+      )}
+      {slug === 'steptimeline' && <StepTimeline client:load steps={processSteps} />}
+      {slug === 'intakewizard' && (
+        <IntakeWizard
+          client:load
+          turnstileSiteKey=""
+          apiUrl="/api/intake"
+          privacyHref="/juridisch/privacyverklaring"
+        />
+      )}
+      {slug === 'mobilemenu' && <MobileMenu client:load items={navigation} currentPath="/" />}
+      {!slug && <p class="text-xl">Kies hierboven een component.</p>}
+    </div>
+  </section>
+</BaseLayout>

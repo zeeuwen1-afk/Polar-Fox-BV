@@ -56,6 +56,8 @@ export default defineConfig(
       ...reactHooks.configs['recommended-latest'].rules,
       ...jsxA11y.flatConfigs.strict.rules,
       'react/prop-types': 'off',
+      // Een tabpanel hoort tabIndex=0 te hebben (WAI-ARIA tabs-patroon).
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel'] }],
     },
     settings: { react: { version: 'detect' } },
   },

@@ -1,0 +1,152 @@
+/*
+ * Stijlen voor de React-islands die niet handig in Tailwind-utilities passen:
+ * posities in de kaartenstapel, de 3D-draai van de FAQ-kaarten, de breedte van
+ * de apparaatvoorvertoning. Geen inline styles (CSP), dus alles via klassen en
+ * data-attributen. Animaties staan uit bij prefers-reduced-motion.
+ */
+
+/* --- CardStack: drie kaarten, licht gedraaid en verschoven --- */
+.cardstack {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  max-width: 460px;
+}
+.cardstack-card {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  transition:
+    transform var(--motion-card) cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity var(--motion-card) ease;
+}
+.cardstack-card[data-pos='0'] {
+  z-index: 3;
+  transform: rotate(-3deg);
+}
+.cardstack-card[data-pos='1'] {
+  z-index: 2;
+  transform: rotate(3deg) translate(16px, 14px);
+}
+.cardstack-card[data-pos='2'] {
+  z-index: 1;
+  transform: rotate(-1deg) translate(32px, 28px);
+  opacity: 0.9;
+}
+
+/* --- FlipCards: rotateY 180° in 600 ms, zonder beweging direct wisselen --- */
+.flip {
+  perspective: 1200px;
+  min-height: 240px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  transform-style: preserve-3d;
+  transition: transform var(--motion-flip) ease;
+}
+.flip[data-flipped='true'] .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+    transform-style: flat;
+  }
+  .flip[data-flipped='true'] .flip-inner {
+    transform: none;
+  }
+  .flip-face {
+    backface-visibility: visible;
+    transform: none;
+  }
+  .flip[data-flipped='false'] .flip-back,
+  .flip[data-flipped='true'] .flip-front {
+    display: none;
+  }
+}
+
+/* --- DevicePreview: frame dat vloeiend van breedte verandert --- */
+.device-frame {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  transition: max-width var(--motion-card) ease;
+  border: 4px solid var(--ink);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  background: var(--paper);
+}
+.device-frame[data-device='tablet'] {
+  max-width: 640px;
+}
+.device-frame[data-device='phone'] {
+  max-width: 340px;
+}
+/* Op telefoonbreedte wordt het menu van de voorbeeldsite een hamburger. */
+.device-frame[data-device='phone'] .device-nav {
+  display: none;
+}
+.device-frame:not([data-device='phone']) .device-burger {
+  display: none;
+}
+.device-frame[data-device='phone'] .device-grid {
+  grid-template-columns: 1fr;
+}
+
+/* --- Voortgangsblokjes IntakeWizard --- */
+.progress-block {
+  height: 14px;
+  flex: 1;
+  border: var(--border);
+  border-radius: 4px;
+  background: var(--paper);
+}
+.progress-block[data-state='done'] {
+  background: var(--ink);
+}
+.progress-block[data-state='active'] {
+  background: var(--lime);
+}
+
+/* --- Complexiteitsmeter --- */
+.meter-block {
+  height: 18px;
+  flex: 1;
+  border: var(--border);
+  border-radius: 4px;
+  background: var(--paper);
+  transition: background var(--motion-fast) ease;
+}
+.meter-block[data-filled='true'] {
+  background: var(--ink);
+}
+
+/* --- Sticker die "inspringt" na versturen --- */
+@media (prefers-reduced-motion: no-preference) {
+  .pop-in {
+    animation: pop-in 500ms cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+  }
+}
+@keyframes pop-in {
+  from {
+    transform: scale(0.4) rotate(-12deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(var(--tilt, -3deg));
+    opacity: 1;
+  }
+}

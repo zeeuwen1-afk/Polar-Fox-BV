@@ -1,5 +1,6 @@
 @import './tokens.css';
 @import 'tailwindcss';
+@import './islands.css' layer(components);
 
 /*
  * Tailwind 4 leest zijn design-tokens uit @theme. "inline" zorgt dat de
