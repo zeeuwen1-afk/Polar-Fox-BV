@@ -34,27 +34,41 @@ export const slotLabels: Record<(typeof slotValues)[number], string> = {
   'vr-middag': 'Vrijdag middag',
 };
 
-const trimmed = (max: number, label: string) =>
-  z.string().trim().max(max, `${label} mag maximaal ${max} tekens zijn.`);
+// Elke tekst heeft een Nederlandse melding voor "ontbreekt" (schema-niveau) en "te lang".
+const text = (max: number, label: string, missing: string) =>
+  z.string({ error: missing }).trim().max(max, `${label} mag maximaal ${max} tekens zijn.`);
 
 export const intakeSchema = z.object({
-  naam: trimmed(80, 'Je naam').min(2, 'Vul je naam in (minimaal 2 tekens).'),
-  bedrijf: trimmed(120, 'De bedrijfsnaam').optional().default(''),
+  naam: text(80, 'Je naam', 'Vul je naam in.').min(2, 'Vul je naam in (minimaal 2 tekens).'),
+  bedrijf: text(120, 'De bedrijfsnaam', 'Ongeldige bedrijfsnaam.').optional().default(''),
   email: z
-    .string()
+    .string({ error: 'Vul een geldig e-mailadres in.' })
     .trim()
     .max(160, 'Het e-mailadres mag maximaal 160 tekens zijn.')
     .pipe(z.email('Vul een geldig e-mailadres in.')),
-  telefoon: trimmed(30, 'Het telefoonnummer').optional().default(''),
-  plaats: trimmed(80, 'De plaats').min(1, 'Vul de plaats van je bedrijf in.'),
-  soort: z.enum(projectKindValues, { message: 'Kies wat je wilt laten maken.' }),
-  functies: z.array(z.enum(featureValues)).max(featureValues.length).default([]),
-  voorkeur: z.enum(preferenceValues, { message: 'Kies wanneer de intake je uitkomt.' }),
-  dagdeel: z.enum(slotValues).optional(),
-  akkoord: z.literal(true, { message: 'Ga akkoord met de privacyverklaring om te versturen.' }),
+  telefoon: text(30, 'Het telefoonnummer', 'Ongeldig telefoonnummer.').optional().default(''),
+  plaats: text(80, 'De plaats', 'Vul de plaats van je bedrijf in.').min(
+    1,
+    'Vul de plaats van je bedrijf in.',
+  ),
+  soort: z.enum(projectKindValues, { error: 'Kies wat je wilt laten maken.' }),
+  functies: z
+    .array(z.enum(featureValues, { error: 'Onbekende functie.' }), { error: 'Ongeldige functies.' })
+    .max(featureValues.length, 'Te veel functies.')
+    .default([]),
+  voorkeur: z.enum(preferenceValues, { error: 'Kies wanneer de intake je uitkomt.' }),
+  dagdeel: z.enum(slotValues, { error: 'Onbekend dagdeel.' }).optional(),
+  akkoord: z.literal(true, { error: 'Ga akkoord met de privacyverklaring om te versturen.' }),
   /** Honeypot: mensen zien dit veld niet, bots vullen het in. Moet leeg zijn. */
-  website: z.string().max(0, 'Ongeldige aanvraag.').optional().default(''),
-  turnstileToken: z.string().min(1, 'De spamcontrole is nog niet afgerond.').max(4096),
+  website: z
+    .string({ error: 'Ongeldige aanvraag.' })
+    .max(0, 'Ongeldige aanvraag.')
+    .optional()
+    .default(''),
+  turnstileToken: z
+    .string({ error: 'De spamcontrole is nog niet afgerond.' })
+    .min(1, 'De spamcontrole is nog niet afgerond.')
+    .max(4096, 'Ongeldige spamcontrole.'),
 });
 
 export type IntakeInput = z.input<typeof intakeSchema>;

@@ -1,0 +1,44 @@
+# Cloudflare Worker: serveert de statische site uit ../dist en handelt
+# POST /api/intake af. Secrets (TURNSTILE_SECRET, BREVO_API_KEY, LOG_SALT)
+# zet je met `wrangler secret put <NAAM> --config worker/wrangler.toml`.
+name = "polarfox-website"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Statische assets: alles wat niet met /api begint komt uit de Astro-build.
+[assets]
+directory = "../dist"
+binding = "ASSETS"
+# /prijzen/index.html wordt geserveerd op /prijzen; /prijzen/ stuurt door naar /prijzen.
+html_handling = "drop-trailing-slash"
+not_found_handling = "404-page"
+run_worker_first = ["/api/*"]
+
+# Niet-geheime instellingen. Overschrijf per omgeving met [env.<naam>.vars].
+[vars]
+ALLOWED_ORIGINS = "https://polarfoxbv.nl,https://www.polarfoxbv.nl"
+INTAKE_TO_EMAIL = "info@polarfoxbv.nl"
+INTAKE_FROM_EMAIL = "info@polarfoxbv.nl"
+INTAKE_FROM_NAME = "Polar Fox"
+
+# Teller voor rate limiting (maximaal 5 aanvragen per IP per uur).
+# Maak de namespace aan met `wrangler kv namespace create RATE_LIMIT` en vul het id in.
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "VUL_IN_NA_WRANGLER_KV_NAMESPACE_CREATE"
+
+[observability]
+enabled = true
+
+# Preview-omgeving (wordt door CI gebruikt voor pull requests).
+[env.preview]
+name = "polarfox-website-preview"
+[env.preview.vars]
+ALLOWED_ORIGINS = "https://polarfox-website-preview.workers.dev"
+INTAKE_TO_EMAIL = "info@polarfoxbv.nl"
+INTAKE_FROM_EMAIL = "info@polarfoxbv.nl"
+INTAKE_FROM_NAME = "Polar Fox (preview)"
+[[env.preview.kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "VUL_IN_NA_WRANGLER_KV_NAMESPACE_CREATE"

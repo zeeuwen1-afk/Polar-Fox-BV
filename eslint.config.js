@@ -14,7 +14,7 @@ export default defineConfig(
     ignores: [
       'dist/**',
       '.astro/**',
-      '.wrangler/**',
+      '**/.wrangler/**',
       'node_modules/**',
       'playwright-report/**',
       'test-results/**',
@@ -69,7 +69,7 @@ export default defineConfig(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     },
   },
   prettier,

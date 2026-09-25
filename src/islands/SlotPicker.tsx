@@ -15,7 +15,7 @@ export default function SlotPicker() {
     <form method="get" action="/intake" className="flex flex-col gap-6">
       <fieldset className="m-0 border-0 p-0">
         <legend className="mb-3 font-bold">Wanneer komt het je uit?</legend>
-        <div className="grid gap-3 lg:grid-cols-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {slotValues.map((value) => {
             const checked = slot === value;
             return (

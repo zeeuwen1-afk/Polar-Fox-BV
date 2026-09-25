@@ -37,7 +37,7 @@ export default function StepTimeline({ steps }: StepTimelineProps) {
 
   return (
     <div>
-      <div role="tablist" aria-label="Stappen" className="grid gap-3 lg:grid-cols-5 sm:grid-cols-3">
+      <div role="tablist" aria-label="Stappen" className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {steps.map((item, index) => {
           const selected = index === active;
           return (

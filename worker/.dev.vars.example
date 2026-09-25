@@ -1,0 +1,4 @@
+# Kopieer naar worker/.dev.vars voor `npm run worker:dev`. Nooit committen.
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+BREVO_API_KEY=xkeysib-vul-in
+LOG_SALT=verander-mij

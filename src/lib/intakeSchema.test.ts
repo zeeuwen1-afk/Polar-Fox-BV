@@ -54,6 +54,28 @@ describe('intakeSchema', () => {
     }
   });
 
+  it('geeft Nederlandse meldingen als verplichte velden helemaal ontbreken', () => {
+    const result = intakeSchema.safeParse({});
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const errors = fieldErrors(result.error);
+      expect(Object.keys(errors).sort()).toEqual([
+        'akkoord',
+        'email',
+        'naam',
+        'plaats',
+        'soort',
+        'turnstileToken',
+        'voorkeur',
+      ]);
+      for (const message of Object.values(errors)) {
+        expect(message).not.toMatch(/invalid input|expected|received/i);
+      }
+      expect(errors.naam).toBe('Vul je naam in.');
+      expect(errors.soort).toBe('Kies wat je wilt laten maken.');
+    }
+  });
+
   it('geeft per veld één Nederlandse foutmelding', () => {
     const result = intakeSchema.safeParse({ ...valid, naam: '', email: 'nee' });
     expect(result.success).toBe(false);
