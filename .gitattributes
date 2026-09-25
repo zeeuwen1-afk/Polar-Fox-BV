@@ -1,0 +1,6 @@
+# Altijd LF in de repo, ongeacht het OS van de ontwikkelaar.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.woff2 binary
+*.pdf binary
