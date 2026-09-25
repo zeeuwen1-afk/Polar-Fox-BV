@@ -170,7 +170,8 @@ test('mobiel menu opent en sluit met Escape', async ({ page }, testInfo) => {
   const dialog = page.getByRole('dialog', { name: 'Menu' });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole('link', { name: 'Prijzen' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Menu sluiten' }).first()).toBeFocused();
+  // Focus gaat naar de sluitknop ín het menu (de menuknop zelf heet nu ook "Menu sluiten").
+  await expect(dialog.getByRole('button', { name: 'Menu sluiten' })).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
   await expect(open).toBeFocused();
