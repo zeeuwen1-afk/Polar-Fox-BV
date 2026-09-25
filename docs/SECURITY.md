@@ -31,3 +31,19 @@ probleem niet publiek voordat het is verholpen. Dezelfde informatie staat machin
 - Headertest (Mozilla Observatory of securityheaders.com); score in `docs/RUNBOOK.md`.
 - CSP in de browser zonder consolefouten op elke pagina.
 - Turnstile en rate limiting getest tegen de productie-Worker.
+
+## Hoe de CSP is opgebouwd
+
+De Content Security Policy staat op twee plekken die samen gelden:
+
+1. **Per pagina in een `<meta http-equiv>`**, gegenereerd door Astro (`security.csp` in
+   `astro.config.mjs`): `default-src 'self'`, `script-src` en `style-src` met SHA-256-hashes van
+   de eigen inline scripts en styles, plus `img-src`, `font-src`, `connect-src` en `frame-src`
+   (alleen `challenges.cloudflare.com` voor Turnstile). Geen `'unsafe-inline'`.
+2. **In de HTTP-header** (`public/_headers` en als vangnet `worker/src/headers.ts`): de
+   directives die in een meta-tag niet werken, zoals `frame-ancestors 'none'`, plus `base-uri`,
+   `form-action` en `object-src`.
+
+Gevolg voor ontwikkelaars: geen `style=""`-attributen en geen inline event handlers; alles via
+klassen, data-attributen en modules uit de build. De preview en de Playwright-tests laten een
+CSP-overtreding meteen als consolefout zien.

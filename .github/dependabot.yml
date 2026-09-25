@@ -1,0 +1,36 @@
+# Wekelijkse updates van afhankelijkheden, gegroepeerd zodat het overzichtelijk blijft.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '07:00'
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns: ['astro', '@astrojs/*']
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      tooling:
+        patterns: ['eslint*', '@eslint/*', 'typescript-eslint', 'prettier*', 'husky', 'lint-staged']
+      tests:
+        patterns:
+          [
+            'vitest',
+            '@vitest/*',
+            '@playwright/test',
+            '@axe-core/*',
+            '@lhci/*',
+            'jsdom',
+            '@testing-library/*',
+          ]
+      cloudflare:
+        patterns: ['wrangler', '@cloudflare/*']
+    labels: ['dependencies']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

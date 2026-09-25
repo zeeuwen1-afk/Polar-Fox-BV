@@ -290,5 +290,7 @@ describe('router', () => {
       makeCtx().ctx,
     );
     expect(await response.text()).toBe('asset');
+    expect(response.headers.get('X-Frame-Options')).toBe('DENY');
+    expect(response.headers.get('Strict-Transport-Security')).toContain('max-age=63072000');
   });
 });

@@ -1,6 +1,7 @@
 import type { Env } from './env';
 import { handleIntake } from './intake';
 import { corsHeaders, isAllowedOrigin } from './cors';
+import { withSecurityHeaders } from './headers';
 
 /**
  * Eén route: POST /api/intake. Al het andere komt uit de statische assets.
@@ -29,7 +30,7 @@ export default {
       return json({ ok: false, message: 'Niet gevonden.' }, 404, request, env);
     }
 
-    return env.ASSETS.fetch(request);
+    return withSecurityHeaders(await env.ASSETS.fetch(request));
   },
 } satisfies ExportedHandler<Env>;
 
