@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Marquee from '../components/Marquee.astro';
 import Sticker from '../components/Sticker.astro';
 import Placeholder from '../components/Placeholder.astro';
 import CardStack from '../islands/CardStack';
@@ -12,7 +11,7 @@ import SlotPicker from '../islands/SlotPicker';
 import { cases } from '../content/cases';
 import { homeFaq } from '../content/faq';
 import { lowestMonthly } from '../content/packages';
-import { copy, marqueeItems, site } from '../content/site';
+import { copy, site } from '../content/site';
 import { formatEuro } from '../lib/pricing';
 import { faqJsonLd } from '../lib/jsonld';
 
@@ -120,14 +119,10 @@ const homeSteps = [
     </div>
   </section>
 
-  <!-- 2. Lopende band -->
-  <Marquee />
-
-  <!-- 3. Bewijs -->
+  <!-- 2. Bewijs -->
   <section class="container-site py-12 md:py-20" aria-labelledby="bewijs">
     <h2 id="bewijs">{copy.proofTitle}</h2>
     <p class="mt-4 max-w-2xl text-xl">{copy.proofText}</p>
-    <p class="sr-only">Wat we bouwen: {marqueeItems.join(', ').toLowerCase()}.</p>
     <div class="mt-10 grid gap-8 md:grid-cols-2">
       {cases.map((item) => (
         <a
@@ -160,7 +155,7 @@ const homeSteps = [
     </div>
   </section>
 
-  <!-- 4. Functieschakelaars -->
+  <!-- 3. Functieschakelaars -->
   <section class="on-ink bg-ink py-16 text-paper md:py-24" aria-labelledby="functies">
     <div class="container-site">
       <h2 id="functies" class="text-paper">
@@ -175,7 +170,7 @@ const homeSteps = [
     </div>
   </section>
 
-  <!-- 5. Werkwijze -->
+  <!-- 4. Werkwijze -->
   <section class="container-site py-16 md:py-24" aria-labelledby="werkwijze">
     <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <h2 id="werkwijze">Zo werkt het.</h2>
@@ -188,7 +183,7 @@ const homeSteps = [
     </div>
   </section>
 
-  <!-- 6. Blijven of stoppen -->
+  <!-- 5. Blijven of stoppen -->
   <section class="container-site pb-16 md:pb-24" aria-labelledby="exit">
     <h2 id="exit" class="sr-only">
       Blijf je of stop je?
@@ -197,7 +192,7 @@ const homeSteps = [
     <p class="mt-6 max-w-2xl">{copy.exit}</p>
   </section>
 
-  <!-- 7. FAQ -->
+  <!-- 6. FAQ -->
   <section class="bg-stone py-16 md:py-24" aria-labelledby="faq">
     <div class="container-site">
       <h2 id="faq">
@@ -209,7 +204,7 @@ const homeSteps = [
     </div>
   </section>
 
-  <!-- 8. Dagdeel kiezen -->
+  <!-- 7. Dagdeel kiezen -->
   <section class="container-site py-16 md:py-24" aria-labelledby="dagdeel">
     <div class="card-lg bg-pink p-6 md:p-10">
       <h2 id="dagdeel">

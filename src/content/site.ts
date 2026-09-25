@@ -71,14 +71,3 @@ export const footerColumns = [
     ],
   },
 ] as const;
-
-/** Woorden op de lopende band; staan ook als tekst elders op de pagina. */
-export const marqueeItems = [
-  'Klantportalen',
-  'Boekingssystemen',
-  'Dashboards',
-  'Websites',
-  'Ledenomgevingen',
-  'Koppelingen',
-  'Beheer',
-] as const;
