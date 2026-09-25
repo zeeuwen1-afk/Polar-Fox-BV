@@ -1,0 +1,32 @@
+---
+/**
+ * Sticker: pilvorm met 3 px rand, licht gedraaid (-4° tot 4°), optioneel
+ * met langzame wiebelanimatie (staat stil bij prefers-reduced-motion).
+ */
+type Color = 'paper' | 'lime' | 'pink' | 'sky' | 'sun';
+
+interface Props {
+  color?: Color;
+  tilt?: number;
+  wobble?: boolean;
+  class?: string;
+}
+
+const { color = 'paper', tilt = -3, wobble = false, class: className = '' } = Astro.props;
+const clampedTilt = Math.max(-4, Math.min(4, Math.round(tilt)));
+// Geen style-attribuut: de CSP staat inline styles niet toe. Klassen tilt-n4 t/m tilt-4 staan in global.css.
+const tiltClass = clampedTilt < 0 ? `tilt-n${-clampedTilt}` : `tilt-${clampedTilt}`;
+
+// Volledige klassenamen, zodat Tailwind ze bij het scannen ziet.
+const colorClass: Record<Color, string> = {
+  paper: 'bg-paper',
+  lime: 'bg-lime',
+  pink: 'bg-pink',
+  sky: 'bg-sky',
+  sun: 'bg-sun',
+};
+---
+
+<span class:list={['sticker', colorClass[color], tiltClass, wobble && 'sticker-wobble', className]}>
+  <slot />
+</span>

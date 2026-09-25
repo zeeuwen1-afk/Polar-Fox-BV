@@ -1,0 +1,6 @@
+# Meld kwetsbaarheden in de website of het intakeformulier van Polar Fox B.V.
+Contact: mailto:info@polarfoxbv.nl
+Preferred-Languages: nl, en
+Canonical: https://polarfoxbv.nl/.well-known/security.txt
+Policy: https://polarfoxbv.nl/juridisch/privacyverklaring
+Expires: 2027-09-25T00:00:00.000Z

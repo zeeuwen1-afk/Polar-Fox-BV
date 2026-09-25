@@ -1,0 +1,14 @@
+{
+  "name": "Polar Fox",
+  "short_name": "Polar Fox",
+  "description": "Maatwerk apps en websites op abonnementsbasis.",
+  "lang": "nl",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FFFFFF",
+  "theme_color": "#111111",
+  "icons": [
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

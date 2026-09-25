@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Logo from '../components/Logo.astro';
+import Sticker from '../components/Sticker.astro';
+---
+
+<BaseLayout
+  title="Pagina niet gevonden"
+  description="Deze pagina bestaat niet of is verhuisd."
+  noindex
+>
+  <section class="container-site flex flex-col items-center py-20 text-center md:py-28">
+    <div class="card-lg bg-ink p-8">
+      <Logo size={120} idPrefix="notfound-logo" label="Poolvos van Polar Fox" />
+    </div>
+    <Sticker color="sun" tilt={3} class="mt-10">
+      Foutcode 404
+    </Sticker>
+    <h1 class="mt-6">
+      Hier is <span class="mark-pink">niets</span> te vinden.
+    </h1>
+    <p class="mt-6 max-w-xl text-xl">
+      De pagina die je zocht bestaat niet of is verhuisd. De vos brengt je graag terug naar het
+      begin.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a href="/" class="btn btn-lime text-lg">
+        Naar de homepage
+      </a>
+      <a href="/intake" class="btn text-lg">
+        Plan een intake
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,368 @@
+@import './tokens.css';
+@import 'tailwindcss';
+
+/*
+ * Tailwind 4 leest zijn design-tokens uit @theme. "inline" zorgt dat de
+ * utility-klassen de CSS-variabelen uit tokens.css gebruiken, zodat er
+ * maar één plek is waar een kleur wordt vastgelegd.
+ */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-lime: var(--lime);
+  --color-pink: var(--pink);
+  --color-sky: var(--sky);
+  --color-sun: var(--sun);
+  --color-stone: var(--stone);
+
+  --font-sans: var(--font-sans);
+
+  --radius-button: var(--radius-button);
+  --radius-card: var(--radius-card);
+  --radius-card-lg: var(--radius-card-lg);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-hard: var(--shadow-sm);
+  --shadow-hard-lg: var(--shadow-lg);
+  --shadow-hard-pink: var(--shadow-sm-pink);
+  --shadow-hard-lg-pink: var(--shadow-lg-pink);
+  --shadow-hard-lime: var(--shadow-sm-lime);
+  --shadow-hard-lg-lime: var(--shadow-lg-lime);
+
+  --breakpoint-xs: 390px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--ink);
+    background: var(--paper);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-size: 1.0625rem; /* 17 px */
+    line-height: 1.55;
+    min-height: 100dvh;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.1875rem; /* 19 px */
+    }
+  }
+
+  /* Koppen: groot, strak, negatieve letterafstand. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 2rem + 4.5vw, 6.5rem); /* 48 px mobiel -> 104 px desktop */
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 1.5rem + 2.75vw, 4rem); /* 36 px -> 64 px */
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  h3 {
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  /* Zichtbare focus overal: 3 px ink, 3 px ertussen. Op donker vlak lime. */
+  :focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .on-ink :focus-visible,
+  .on-ink:focus-visible {
+    outline-color: var(--lime);
+  }
+
+  ::selection {
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  /* Beweging uit voor wie dat wil. Componenten checken dit ook zelf in JS. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Gemarkeerd woord in een kop: achtergrond lime of roze, 10 px zijruimte. */
+  .mark-lime,
+  .mark-pink,
+  .mark-sky,
+  .mark-sun {
+    color: var(--ink);
+    padding: 0 10px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    border-radius: 6px;
+  }
+  /* In een kop iets meer regelhoogte, zodat het gekleurde vlak de regel erboven niet raakt. */
+  h1 [class^='mark-'],
+  h2 [class^='mark-'] {
+    line-height: 1.12;
+  }
+  .mark-lime {
+    background: var(--lime);
+  }
+  .mark-pink {
+    background: var(--pink);
+  }
+  .mark-sky {
+    background: var(--sky);
+  }
+  .mark-sun {
+    background: var(--sun);
+  }
+
+  /* Kaarten en knoppen: 3 px rand plus harde schaduw. */
+  .bordered {
+    border: var(--border);
+  }
+
+  .card {
+    border: var(--border);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-lg {
+    border: var(--border);
+    border-radius: var(--radius-card-lg);
+    background: var(--paper);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Knop: bij hover 2 px omhoog-links met grotere schaduw, bij klik 3 px omlaag-rechts. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    min-width: 44px;
+    padding: 0.7rem 1.35rem;
+    border: var(--border);
+    border-radius: var(--radius-button);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--motion-fast) ease-out,
+      box-shadow var(--motion-fast) ease-out;
+    touch-action: manipulation;
+    user-select: none;
+  }
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+  .btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-ink {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn-lime {
+    background: var(--lime);
+  }
+  .btn-pink {
+    background: var(--pink);
+  }
+  .btn-sky {
+    background: var(--sky);
+  }
+
+  /* Gekleurde schaduwvarianten (bijvoorbeeld zwarte knop met roze schaduw). */
+  .btn-shadow-pink {
+    box-shadow: var(--shadow-sm-pink);
+  }
+  .btn-shadow-pink:hover {
+    box-shadow: 7px 7px 0 var(--pink);
+  }
+  .btn-shadow-pink:active {
+    box-shadow: 2px 2px 0 var(--pink);
+  }
+  .btn-shadow-lime {
+    box-shadow: var(--shadow-sm-lime);
+  }
+  .btn-shadow-lime:hover {
+    box-shadow: 7px 7px 0 var(--lime);
+  }
+  .btn-shadow-lime:active {
+    box-shadow: 2px 2px 0 var(--lime);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn:hover,
+    .btn:active {
+      transform: none;
+    }
+  }
+
+  /* Sticker: pilvorm met 3 px rand, licht gedraaid. */
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border: var(--border);
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: rotate(var(--tilt, -3deg));
+    white-space: nowrap;
+  }
+
+  /* Draaiing per sticker als klasse (inline styles zijn geblokkeerd door de CSP). */
+  .tilt-n4 {
+    --tilt: -4deg;
+  }
+  .tilt-n3 {
+    --tilt: -3deg;
+  }
+  .tilt-n2 {
+    --tilt: -2deg;
+  }
+  .tilt-n1 {
+    --tilt: -1deg;
+  }
+  .tilt-0 {
+    --tilt: 0deg;
+  }
+  .tilt-1 {
+    --tilt: 1deg;
+  }
+  .tilt-2 {
+    --tilt: 2deg;
+  }
+  .tilt-3 {
+    --tilt: 3deg;
+  }
+  .tilt-4 {
+    --tilt: 4deg;
+  }
+
+  /* Langzame wiebel, alleen als beweging gewenst is. */
+  @media (prefers-reduced-motion: no-preference) {
+    .sticker-wobble {
+      animation: wobble 4s ease-in-out infinite;
+    }
+  }
+  @keyframes wobble {
+    0%,
+    100% {
+      transform: rotate(var(--tilt, -3deg));
+    }
+    50% {
+      transform: rotate(calc(var(--tilt, -3deg) * -1));
+    }
+  }
+
+  /* Invoervelden in dezelfde taal als knoppen. */
+  .field {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.65rem 0.9rem;
+    border: var(--border);
+    border-radius: var(--radius-button);
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+  }
+  .field[aria-invalid='true'] {
+    border-color: #b3001b;
+    box-shadow: 0 0 0 3px #ffd6dd;
+  }
+
+  /* Vaste paginabreedte met zijruimte van 16 px op telefoons. */
+  .container-site {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Skiplink: onzichtbaar tot hij focus krijgt. */
+  .skiplink {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--lime);
+    border: var(--border);
+    border-radius: var(--radius-button);
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+  }
+  .skiplink:focus {
+    top: 1rem;
+  }
+}

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /dev/
+Disallow: /inloggen
+
+Sitemap: https://polarfoxbv.nl/sitemap-index.xml

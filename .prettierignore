@@ -1,0 +1,10 @@
+dist
+.astro
+.wrangler
+node_modules
+playwright-report
+test-results
+.lighthouseci
+coverage
+package-lock.json
+public/juridisch/*.pdf

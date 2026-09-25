@@ -1,0 +1,59 @@
+---
+import Logo from './Logo.astro';
+import { copy, footerColumns, site } from '../content/site';
+
+/**
+ * Footer: zwart vlak met oproep tot intake, vier kolommen en de wettelijke
+ * bedrijfsgegevens (statutaire naam, plaats, KvK, btw).
+ */
+---
+
+<footer class="on-ink mt-24 bg-ink text-paper">
+  <div class="container-site py-16 md:py-20">
+    <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <h2 class="max-w-3xl text-paper">
+        Zullen we bij je <span class="mark-lime">langskomen?</span>
+      </h2>
+      <a href="/intake" class="btn btn-pink shrink-0 self-start text-lg md:self-auto">
+        Plan een intake op locatie
+      </a>
+    </div>
+
+    <div class="mt-16 grid gap-10 border-t-[3px] border-paper/20 pt-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.6fr]">
+      <div>
+        <div class="flex items-center gap-3">
+          <Logo boxed size={34} idPrefix="footer-logo" class="border-[3px] border-paper" />
+          <span class="text-[22px] font-bold tracking-tight">Polar Fox</span>
+        </div>
+        <p class="mt-4 max-w-xs text-paper/85">
+          {site.tagline} Altijd persoonlijk: de intake doen we bij jou op locatie.
+        </p>
+      </div>
+
+      {footerColumns.map((column) => (
+        <nav aria-label={column.title} class="min-w-0 break-words">
+          <h3 class="text-lg text-lime">{column.title}</h3>
+          <ul class="mt-4 flex flex-col gap-2">
+            {column.links.map((link) => (
+              <li>
+                <a href={link.href} class="underline-offset-4 hover:underline">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <div class="mt-12 flex flex-col gap-2 border-t-[3px] border-paper/20 pt-6 text-sm text-paper/75 md:flex-row md:items-center md:justify-between">
+      <p>
+        {site.legalName}, {site.city}. KvK {site.kvk}. Btw {site.btw}.
+        <a href={`mailto:${site.email}`} class="ml-1 underline-offset-4 hover:underline">
+          {site.email}
+        </a>
+      </p>
+      <p>{copy.priceNote}</p>
+    </div>
+  </div>
+</footer>

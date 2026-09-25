@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Polar Fox">
+  <defs>
+    <linearGradient id="aurora" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0" stop-color="#4FC9B8"/><stop offset="0.55" stop-color="#8BE3A8"/><stop offset="1" stop-color="#9AA8FF"/>
+    </linearGradient>
+    <clipPath id="head"><path d="M18 10 L46 36 L74 36 L102 10 L96 58 L60 106 L24 58 Z"/></clipPath>
+  </defs>
+  <path d="M18 10 L46 36 L74 36 L102 10 L96 58 L60 106 L24 58 Z" fill="#FFFFFF"/>
+  <path d="M24 22 L42 38 L31 45 Z" fill="url(#aurora)"/><path d="M96 22 L78 38 L89 45 Z" fill="url(#aurora)"/>
+  <g clip-path="url(#head)"><path d="M10 44 C 34 30, 62 54, 112 34 L 112 41 C 62 62, 34 38, 10 51 Z" fill="url(#aurora)" opacity="0.55"/></g>
+  <path d="M24 58 L44 62 L60 106 Z" fill="#DCEAEF"/><path d="M96 58 L76 62 L60 106 Z" fill="#DCEAEF"/>
+  <path d="M40 53 L52 57 L41 61 Z" fill="#0E1B24"/><path d="M80 53 L68 57 L79 61 Z" fill="#0E1B24"/><path d="M53 90 L67 90 L60 99 Z" fill="#0E1B24"/>
+</svg>

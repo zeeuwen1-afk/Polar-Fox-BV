@@ -1,0 +1,46 @@
+---
+/**
+ * Knop of link-als-knop in huisstijl. Geef `href` voor een link, anders wordt
+ * het een <button>. Kleur en schaduwkleur zijn los te kiezen.
+ */
+type Variant = 'paper' | 'ink' | 'lime' | 'pink' | 'sky';
+type Shadow = 'ink' | 'pink' | 'lime';
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  shadow?: Shadow;
+  type?: 'button' | 'submit';
+  class?: string;
+  id?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'paper',
+  shadow = 'ink',
+  type = 'button',
+  class: className = '',
+  id,
+  ariaLabel,
+} = Astro.props;
+
+const classes = [
+  'btn',
+  variant !== 'paper' && `btn-${variant}`,
+  shadow !== 'ink' && `btn-shadow-${shadow}`,
+  variant === 'ink' && 'on-ink',
+  className,
+];
+---
+
+{href ? (
+  <a href={href} class:list={classes} id={id} aria-label={ariaLabel}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class:list={classes} id={id} aria-label={ariaLabel}>
+    <slot />
+  </button>
+)}

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Marquee from '../components/Marquee.astro';
+import Sticker from '../components/Sticker.astro';
+import { copy, marqueeItems, site } from '../content/site';
+
+/**
+ * Homepage. In fase 1 alleen de hero en de lopende band; de overige secties
+ * (bewijs, functies, werkwijze, exit, FAQ, dagdeelkiezer) volgen in fase 4.
+ */
+---
+
+<BaseLayout
+  title={`${site.name} | ${copy.promise} ${copy.promiseMark}`}
+  titleIsFull
+  description={site.description}
+>
+  <section class="container-site pt-12 pb-8 md:pt-20">
+    <div class="max-w-4xl">
+      <Sticker color="pink" tilt={-3} wobble>
+        Intake bij jou op locatie
+      </Sticker>
+      <h1 class="mt-6">
+        {copy.promise}
+        <br />
+        <span class="mark-lime">{copy.promiseMark}</span>
+      </h1>
+      <p class="mt-8 max-w-2xl text-xl md:text-2xl">{copy.subline}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="/intake" class="btn btn-ink btn-shadow-pink text-lg">
+          Plan een intake
+        </a>
+        <a href="/prijzen" class="btn text-lg">
+          Bekijk de prijzen
+        </a>
+      </div>
+      <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-bold">
+        {['Hosting in de EU', 'Voorstel binnen 5 werkdagen', 'Stop je? Neem alles mee.'].map(
+          (item) => (
+            <li class="flex items-center gap-2">
+              <span class="inline-block h-3.5 w-3.5 rounded-full border-[3px] border-ink bg-lime" />
+              {item}
+            </li>
+          ),
+        )}
+      </ul>
+    </div>
+  </section>
+
+  <Marquee />
+
+  <section class="container-site py-8">
+    <h2 class="sr-only">Wat we bouwen</h2>
+    <p class="max-w-2xl text-lg">
+      Wat we bouwen: {marqueeItems.join(', ').toLowerCase()}. {copy.personal}
+    </p>
+  </section>
+</BaseLayout>

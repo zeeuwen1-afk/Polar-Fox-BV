@@ -1,0 +1,82 @@
+---
+/**
+ * Beeldmerk: de poolvos uit src/assets/logo.svg, inline zodat hij zonder
+ * extra request en zonder CSP-uitzondering meeschaalt.
+ *
+ * - `boxed`: in een zwart vierkant met afgeronde hoeken (menubalk, footer).
+ * - `contour`: op een lichte achtergrond buiten het vierkant krijgt de witte
+ *   vos een ink-contour van 6 SVG-eenheden, anders is hij onzichtbaar.
+ * - `idPrefix`: SVG-id's moeten uniek zijn per pagina als het logo vaker voorkomt.
+ */
+interface Props {
+  size?: number;
+  boxed?: boolean;
+  contour?: boolean;
+  idPrefix?: string;
+  class?: string;
+  label?: string | null;
+}
+
+const {
+  size = 34,
+  boxed = false,
+  contour = false,
+  idPrefix = 'logo',
+  class: className = '',
+  label = null,
+} = Astro.props;
+
+const gradientId = `${idPrefix}-aurora`;
+const clipId = `${idPrefix}-head`;
+const headPath = 'M18 10 L46 36 L74 36 L102 10 L96 58 L60 106 L24 58 Z';
+const isDecorative = label === null;
+---
+
+<span
+  class:list={[
+    'inline-flex shrink-0 items-center justify-center',
+    // Vierkant van 48 px met radius 12 px (briefing). Geen style-attribuut vanwege de CSP.
+    boxed && 'h-12 w-12 rounded-[12px] bg-ink',
+    className,
+  ]}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 120 120"
+    width={size}
+    height={size}
+    role={isDecorative ? undefined : 'img'}
+    aria-label={isDecorative ? undefined : label}
+    aria-hidden={isDecorative ? 'true' : undefined}
+    focusable="false"
+  >
+    <defs>
+      <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="0.6">
+        <stop offset="0" stop-color="#4FC9B8"></stop>
+        <stop offset="0.55" stop-color="#8BE3A8"></stop>
+        <stop offset="1" stop-color="#9AA8FF"></stop>
+      </linearGradient>
+      <clipPath id={clipId}>
+        <path d={headPath}></path>
+      </clipPath>
+    </defs>
+    {contour && (
+      <path d={headPath} fill="none" stroke="var(--ink)" stroke-width="6" stroke-linejoin="round" />
+    )}
+    <path d={headPath} fill="#FFFFFF"></path>
+    <path d="M24 22 L42 38 L31 45 Z" fill={`url(#${gradientId})`}></path>
+    <path d="M96 22 L78 38 L89 45 Z" fill={`url(#${gradientId})`}></path>
+    <g clip-path={`url(#${clipId})`}>
+      <path
+        d="M10 44 C 34 30, 62 54, 112 34 L 112 41 C 62 62, 34 38, 10 51 Z"
+        fill={`url(#${gradientId})`}
+        opacity="0.55"
+      ></path>
+    </g>
+    <path d="M24 58 L44 62 L60 106 Z" fill="#DCEAEF"></path>
+    <path d="M96 58 L76 62 L60 106 Z" fill="#DCEAEF"></path>
+    <path d="M40 53 L52 57 L41 61 Z" fill="#0E1B24"></path>
+    <path d="M80 53 L68 57 L79 61 Z" fill="#0E1B24"></path>
+    <path d="M53 90 L67 90 L60 99 Z" fill="#0E1B24"></path>
+  </svg>
+</span>

@@ -1,0 +1,63 @@
+---
+import Logo from './Logo.astro';
+import MobileMenu from '../islands/MobileMenu';
+import { navigation } from '../content/site';
+
+/**
+ * Menubalk: logo links, in het midden de hoofdlinks (actieve pagina lime met
+ * zwarte rand), rechts "Inloggen" en de knop "Plan een intake".
+ * Op mobiel: logo en menuknop; het menu zelf is een React-island.
+ */
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
+---
+
+<header class="border-b-[3px] border-ink bg-paper">
+  <div class="container-site flex h-20 items-center justify-between gap-4">
+    <a
+      href="/"
+      class="flex items-center gap-3 no-underline"
+      aria-label="Polar Fox, naar de homepage"
+    >
+      <Logo boxed size={34} idPrefix="header-logo" />
+      <span class="text-[22px] font-bold tracking-tight">Polar Fox</span>
+    </a>
+
+    <nav aria-label="Hoofdmenu" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {navigation.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'inline-flex min-h-11 items-center rounded-[10px] border-[3px] px-3.5 font-bold no-underline transition-colors duration-[120ms]',
+                isActive(item.href)
+                  ? 'border-ink bg-lime'
+                  : 'border-transparent hover:border-ink hover:bg-stone',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="hidden items-center gap-3 lg:flex">
+      <a
+        href="/inloggen"
+        class="inline-flex min-h-11 items-center rounded-[10px] border-[3px] border-transparent px-3.5 font-bold no-underline hover:border-ink hover:bg-stone"
+      >
+        Inloggen
+      </a>
+      <a href="/intake" class="btn btn-lime">
+        Plan een intake
+      </a>
+    </div>
+
+    <div class="lg:hidden">
+      <MobileMenu client:idle items={navigation} currentPath={currentPath} />
+    </div>
+  </div>
+</header>
