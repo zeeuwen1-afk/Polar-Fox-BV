@@ -35,7 +35,7 @@ jobs:
       - run: npm run build
         env:
           PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
@@ -61,7 +61,7 @@ jobs:
       - run: npm run test:e2e
         env:
           CI: 'true'
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report
@@ -88,7 +88,7 @@ jobs:
         run: npm run lighthouse
       - name: Lighthouse (desktop)
         run: npm run lighthouse:desktop
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: lighthouse
