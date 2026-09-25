@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import Placeholder from './Placeholder.astro';
+import type { Case } from '../content/cases';
+
+/**
+ * Schermafbeelding van een case: het echte beeld via astro:assets (WebP/AVIF,
+ * juiste width/height, lazy) of, zolang dat ontbreekt, de gelabelde placeholder.
+ */
+interface Props {
+  item: Case;
+  /** Eerste schermvulling? Dan geen lazy loading. */
+  eager?: boolean;
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  item,
+  eager = false,
+  sizes = '(min-width: 1024px) 45vw, (min-width: 768px) 50vw, 100vw',
+  class: className = '',
+} = Astro.props;
+---
+
+{item.image.placeholder || !item.image.src ? (
+  <Placeholder
+    label={`Schermafbeelding ${item.name}`}
+    lines={item.demoLines}
+    tone="paper"
+    class={className}
+  />
+) : (
+  <figure
+    class:list={[
+      'm-0 overflow-hidden rounded-[18px] border-[3px] border-ink bg-paper shadow-hard',
+      className,
+    ]}
+  >
+    <Image
+      src={item.image.src}
+      alt={item.image.alt}
+      widths={[480, 800, 1200, 1600]}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      class="block h-auto w-full"
+    />
+  </figure>
+)}

@@ -19,11 +19,11 @@ Polar Fox B.V. wil dat iedereen deze website kan gebruiken, ook met een schermle
 - Contrast van minimaal 4,5:1; informatie nooit alleen via kleur.
 - Formulieren met labels, foutmeldingen die aan velden gekoppeld zijn en een samenvatting die meeloopt.
 - Alle interactieve onderdelen werken met muis, aanraking en toetsenbord; animaties staan uit bij `prefers-reduced-motion`.
-- Geen bewegende tekst die niet te stoppen is: de lopende band staat stil als je dat in je systeem hebt ingesteld en de inhoud staat ook als gewone tekst op de pagina.
+- Geen bewegende inhoud die niet te stoppen is; de enige animaties zijn korte overgangen die uit staan bij `prefers-reduced-motion`.
 
 ## Bekende beperkingen
 
-- Op enkele plekken staan placeholder-illustraties totdat de definitieve schermafbeeldingen en foto's zijn aangeleverd. Die placeholders hebben een beschrijvend label, maar nog geen definitieve alt-tekst van het echte beeld.
+- Op de werkwijzepagina staat een placeholder-illustratie totdat de foto van een intake op locatie is aangeleverd. Die placeholder heeft een beschrijvend label, maar nog geen alt-tekst van het echte beeld.
 - De pdf-downloads van de algemene voorwaarden en de modelverwerkersovereenkomst zijn nog voorlopige documenten; de definitieve versies worden als toegankelijke pdf aangeleverd.
 
 ## Problemen melden

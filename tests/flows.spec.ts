@@ -4,9 +4,26 @@ import { expect, test, type Page } from '@playwright/test';
  * De belangrijkste flows uit de briefing (hoofdstuk 11), tegen de productie-build.
  * Islands met client:visible hydrateren pas in beeld; `reveal` scrollt ernaartoe.
  */
+/**
+ * Wacht tot het island rond een element gehydrateerd is: Astro haalt dan het
+ * `ssr`-attribuut van <astro-island> weg. Zonder deze wachtstap kan een klik
+ * op een nog statische knop verloren gaan.
+ */
+async function hydrated(page: Page, selector: string) {
+  await page.waitForFunction(
+    (sel) => {
+      const island = document.querySelector(sel)?.closest('astro-island');
+      return !!island && !island.hasAttribute('ssr');
+    },
+    selector,
+    { timeout: 15_000 },
+  );
+}
+
 async function reveal(page: Page, selector: string) {
   const locator = page.locator(selector).first();
   await locator.scrollIntoViewIfNeeded();
+  await hydrated(page, selector);
   return locator;
 }
 
@@ -24,6 +41,7 @@ test('home laadt en toont de H1 met de belofte', async ({ page }) => {
 
 test('CardStack wisselt van kaart', async ({ page }) => {
   await page.goto('/');
+  await hydrated(page, '[data-testid="cardstack"]');
   const top = page.getByTestId('cardstack-top');
   await expect(top).toContainText('Applicaties');
   await page.getByRole('button', { name: 'Volgende kaart' }).click();
@@ -165,6 +183,7 @@ test('SlotPicker stuurt het dagdeel mee naar de intake', async ({ page }) => {
 test('mobiel menu opent en sluit met Escape', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobiel', 'alleen op mobiel');
   await page.goto('/');
+  await hydrated(page, 'button[aria-controls]');
   const open = page.getByRole('button', { name: 'Menu openen' });
   await open.click();
   const dialog = page.getByRole('dialog', { name: 'Menu' });

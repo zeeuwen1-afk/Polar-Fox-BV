@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import Placeholder from '../components/Placeholder.astro';
+import CaseImage from '../components/CaseImage.astro';
 import Sticker from '../components/Sticker.astro';
 import CaseTabs from '../islands/CaseTabs';
 import { cases } from '../content/cases';
@@ -51,12 +51,7 @@ import { formatEuro } from '../lib/pricing';
               <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <Placeholder
-            label={`Schermafbeelding ${item.name}`}
-            lines={item.demoLines}
-            tone="paper"
-            class="self-start"
-          />
+          <CaseImage item={item} class="self-start" />
         </div>
       </article>
     ))}

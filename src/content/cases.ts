@@ -4,6 +4,10 @@
  * schermafbeeldingen in public/images/cases/ staan (zie README daar).
  */
 
+import type { ImageMetadata } from 'astro';
+import hppDashboardImage from '../assets/cases/hpp-dashboard.png';
+import yogaCompanyImage from '../assets/cases/yogacompany.png';
+
 export type CaseId = 'hpp-dashboard' | 'yogacompany';
 
 export interface CaseTab {
@@ -13,8 +17,8 @@ export interface CaseTab {
 }
 
 export interface CaseImage {
-  /** Pad onder public/, bijvoorbeeld /images/cases/hpp-dashboard.png. */
-  src: string;
+  /** Beeld uit src/assets/cases/ (astro:assets), of null zolang het ontbreekt. */
+  src: ImageMetadata | null;
   alt: string;
   /** Zolang het echte beeld ontbreekt, toont de site een gelabelde placeholder. */
   placeholder: boolean;
@@ -69,9 +73,9 @@ export const cases: readonly Case[] = [
       },
     ],
     image: {
-      src: '/images/cases/hpp-dashboard.png',
-      alt: 'Overzichtsscherm van HPP-Dashboard met omzet, personeelskosten en marge per week.',
-      placeholder: true,
+      src: hppDashboardImage,
+      alt: 'Dashboard van HPP-Dashboard met omzet van vandaag, gemiddelde bon, voorraad, HACCP-taken, omzet per groep en top 5 artikelen.',
+      placeholder: false,
     },
     demoLines: [
       'Omzet deze week: automatisch uit de kassa',
@@ -112,9 +116,9 @@ export const cases: readonly Case[] = [
       },
     ],
     image: {
-      src: '/images/cases/yogacompany.png',
-      alt: 'Klantportaal van YogaCompany.eu met lesstof en voortgang per module.',
-      placeholder: true,
+      src: yogaCompanyImage,
+      alt: 'Homepage van YogaCompany.eu: menu met Academy, workshops en privéyoga, en een foto van een yogahouding met de knoppen Boek privé yoga en Ontdek de opleidingen.',
+      placeholder: false,
     },
     demoLines: ['Module 3 van 8: afgerond', 'Volgende les: zaterdag 10:00', 'Betaling: voldaan'],
   },

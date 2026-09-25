@@ -1,8 +1,9 @@
 # Beelden aanleveren
 
-Zolang er geen echte beelden zijn, toont de site duidelijk gelabelde
-placeholder-illustraties (geen stockfoto's). Zet de echte beelden in deze map
-met exact deze bestandsnamen; de site pikt ze dan op zonder codewijziging.
+Zolang een beeld ontbreekt, toont de site een duidelijk gelabelde
+placeholder-illustratie (geen stockfoto's). Schermafbeeldingen van de cases staan
+in `src/assets/cases/` en gaan via `astro:assets` (zie RUNBOOK §5); de eerste
+versies zijn op 25 september 2026 geplaatst. De foto van een intake komt in deze map.
 
 | Bestand                          | Wat                                                                         | Formaat     | Afmeting               |
 | -------------------------------- | --------------------------------------------------------------------------- | ----------- | ---------------------- |
