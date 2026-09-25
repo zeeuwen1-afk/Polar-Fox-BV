@@ -24,7 +24,7 @@ export default function BillingToggle() {
         role="switch"
         aria-checked={yearly}
         onClick={() => setYearly((current) => !current)}
-        className="flex min-h-12 items-center gap-3 rounded-[12px] border-[3px] border-ink bg-paper px-4 font-bold shadow-hard"
+        className="flex min-h-12 flex-wrap items-center gap-3 rounded-[12px] border-[3px] border-ink bg-paper px-4 font-bold shadow-hard"
         data-testid="billing-toggle"
       >
         <span

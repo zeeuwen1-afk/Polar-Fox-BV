@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Placeholder from '../components/Placeholder.astro';
+import Sticker from '../components/Sticker.astro';
+import StepTimeline from '../islands/StepTimeline';
+import { processSteps, responseTimes } from '../content/packages';
+
+const hosting = [
+  { title: 'Bezoeker', text: 'Jouw klant, op elk apparaat.' },
+  { title: 'Site of app', text: 'Snel netwerk, SSL, aanvalsbescherming.' },
+  { title: 'Database in de EU', text: 'Eigen database per klant, versleuteld.' },
+];
+
+const toneClass = { pink: 'bg-pink', sun: 'bg-sun', paper: 'bg-paper' } as const;
+---
+
+<BaseLayout
+  title="Werkwijze"
+  description="Van gratis intake op locatie tot beheer voor een vast bedrag: vijf duidelijke stappen, vaste prijzen, wekelijkse demo's en heldere reactietijden."
+>
+  <PageHero
+    sticker="Werkwijze"
+    stickerColor="pink"
+    subline="Je weet vooraf wat het kost en wanneer het klaar is. Daarna weet je precies wie je belt en hoe snel we reageren."
+  >
+    Duidelijk vooraf. <span class="mark-lime">Betrouwbaar daarna.</span>
+  </PageHero>
+
+  <section class="container-site py-8 md:py-12" aria-labelledby="stappen">
+    <h2 id="stappen" class="sr-only">
+      De vijf stappen
+    </h2>
+    <StepTimeline client:visible steps={processSteps} />
+  </section>
+
+  <section class="container-site py-12 md:py-20" aria-labelledby="hosting">
+    <h2 id="hosting">
+      Zo draait <span class="mark-sky">je software.</span>
+    </h2>
+    <ol class="mt-10 grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center">
+      {hosting.map((node, index) => (
+        <>
+          {index > 0 && (
+            <li class="hidden text-4xl font-bold md:block" aria-hidden="true">
+              →
+            </li>
+          )}
+          <li class="card flex flex-col gap-1 p-5">
+            <span class="text-sm font-bold uppercase tracking-wide">Stap {index + 1}</span>
+            <span class="text-xl font-bold tracking-tight">{node.title}</span>
+            <span>{node.text}</span>
+          </li>
+        </>
+      ))}
+    </ol>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <Sticker color="lime" tilt={-2}>
+        Bewaking elke minuut
+      </Sticker>
+      <Sticker color="sun" tilt={2}>
+        Updates getest vóór livegang
+      </Sticker>
+      <Sticker color="sky" tilt={-1}>
+        Dagelijkse back-up, wekelijkse kopie elders
+      </Sticker>
+    </div>
+  </section>
+
+  <section class="container-site py-12 md:py-20" aria-labelledby="misgaat">
+    <h2 id="misgaat">
+      Als er iets <span class="mark-pink">misgaat.</span>
+    </h2>
+    <div class="mt-8 overflow-x-auto">
+      <table class="w-full min-w-[640px] border-separate border-spacing-0 overflow-hidden rounded-[18px] border-[3px] border-ink text-left">
+        <thead>
+          <tr class="bg-ink text-paper">
+            <th scope="col" class="px-5 py-4">
+              Situatie
+            </th>
+            <th scope="col" class="px-5 py-4">
+              Reactie
+            </th>
+            <th scope="col" class="px-5 py-4">
+              Oplossing
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {responseTimes.map((row) => (
+            <tr class:list={[toneClass[row.tone], 'border-t-[3px] border-ink']}>
+              <th scope="row" class="border-t-[3px] border-ink px-5 py-4 font-bold">
+                {row.situation}
+              </th>
+              <td class="border-t-[3px] border-ink px-5 py-4">{row.response}</td>
+              <td class="border-t-[3px] border-ink px-5 py-4">{row.resolution}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="container-site pb-16 md:pb-24" aria-labelledby="persoonlijk">
+    <div class="card-lg bg-sun p-6 md:p-10">
+      <div class="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+        <div>
+          <h2 id="persoonlijk">
+            Altijd <span class="mark-pink">persoonlijk.</span>
+          </h2>
+          <p class="mt-4 text-xl">
+            We werken niet vanachter een ticketsysteem. De intake doen we bij jou op locatie: we
+            kijken mee op de werkvloer en spreken de mensen die de software gaan gebruiken. Daarna
+            houd je één vast aanspreekpunt, van bouw tot beheer.
+          </p>
+          <a href="/intake" class="btn btn-ink mt-6">
+            Plan een intake op locatie
+          </a>
+        </div>
+        <Placeholder label="Foto: intake op locatie" tone="paper" aspect="photo" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

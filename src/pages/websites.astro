@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PackageGrid from '../components/PackageGrid.astro';
+import DevicePreview from '../islands/DevicePreview';
+import BillingToggle from '../islands/BillingToggle';
+import Accordion from '../islands/Accordion';
+import { websiteFaq } from '../content/faq';
+import { lowestMonthly, packages } from '../content/packages';
+import { formatEuro } from '../lib/pricing';
+
+const fromMonthly = formatEuro(lowestMonthly('websites'));
+const beheerWeb = packages.beheer.items.find((item) => item.id === 'beheer-web');
+
+const tiles = [
+  {
+    title: 'Snel',
+    text: 'Statisch gebouwd en wereldwijd gecachet. Laadt in een oogwenk, ook op een telefoon.',
+  },
+  { title: 'Vindbaar', text: 'Nette structuur, metadata en sitemap. Google begrijpt wat je doet.' },
+  {
+    title: 'Toegankelijk',
+    text: 'WCAG 2.1 AA: leesbaar, bedienbaar met toetsenbord en schermlezer.',
+  },
+  {
+    title: 'Zelf beheren',
+    text: 'Teksten en beelden pas je zelf aan, zonder dat er iets kapot kan.',
+  },
+  {
+    title: 'Geen cookiebanner',
+    text: 'Geen trackingcookies, dus ook geen banner die bezoekers wegjaagt.',
+  },
+];
+---
+
+<BaseLayout
+  title="Websites"
+  description={`Websites vanaf ${fromMonthly} per maand excl. btw, inclusief hosting, onderhoud en aanpassingen. Snel, vindbaar, toegankelijk en zelf te beheren.`}
+>
+  <PageHero
+    sticker="Websites"
+    stickerColor="sky"
+    subline="Geen digitale folder, maar een site die bezoekers omzet in aanvragen. Snel, vindbaar en toegankelijk, met hosting en onderhoud in één vast bedrag."
+  >
+    Een website die <span class="mark-lime">aanvragen</span> oplevert.
+  </PageHero>
+
+  <section class="container-site py-8 md:py-12" aria-labelledby="preview">
+    <h2 id="preview" class="text-center">
+      Op elk scherm <span class="mark-pink">goed.</span>
+    </h2>
+    <p class="mx-auto mt-4 max-w-2xl text-center text-xl">
+      Bakkerij Veld is een fictief voorbeeld. Wissel van schermformaat en zie hoe de indeling zich
+      aanpast.
+    </p>
+    <div class="mt-10">
+      <DevicePreview client:visible />
+    </div>
+  </section>
+
+  <section class="container-site py-12 md:py-16" aria-labelledby="kenmerken">
+    <h2 id="kenmerken" class="sr-only">
+      Kenmerken
+    </h2>
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+      {tiles.map((tile) => (
+        <li class="card flex flex-col gap-2 p-5">
+          <span
+            class="inline-block h-4 w-4 rounded-full border-[3px] border-ink bg-sky"
+            aria-hidden="true"
+          />
+          <h3 class="text-xl">{tile.title}</h3>
+          <p class="text-base">{tile.text}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container-site py-12 md:py-16" aria-labelledby="pakketten">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <h2 id="pakketten">Pakketten</h2>
+      <BillingToggle client:visible />
+    </div>
+    <div class="mt-8">
+      <PackageGrid group={packages.websites} showTitle={false} />
+    </div>
+  </section>
+
+  <section class="container-site py-8" aria-labelledby="bestaand">
+    <div class="card-lg bg-pink p-6 md:p-10">
+      <div class="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+        <div>
+          <h2 id="bestaand">
+            Al een website die je <span class="mark-lime">wilt houden?</span>
+          </h2>
+          <p class="mt-4 max-w-2xl text-xl">
+            Dan nemen we het beheer over: hosting, updates, back-ups en bewaking. We beginnen met
+            een overname-check, zodat je weet waar je staat.
+          </p>
+        </div>
+        <div class="card bg-paper p-5">
+          <p class="text-sm font-bold uppercase tracking-wide">Beheer Website</p>
+          <p class="text-3xl font-bold tracking-tight">
+            vanaf {formatEuro(beheerWeb?.monthly ?? 0)} <span class="text-base">p/m excl. btw</span>
+          </p>
+          <p class="mt-1 text-sm">
+            Na een overname-check van {formatEuro(packages.beheer.checkFee)} excl. btw.
+          </p>
+          <a href="/intake?soort=beheer" class="btn btn-ink mt-4 w-full">
+            Bespreek het beheer
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-site py-12 md:py-16" aria-labelledby="faq">
+    <h2 id="faq">
+      Vragen over <span class="mark-sky">websites.</span>
+    </h2>
+    <div class="mt-8 max-w-3xl">
+      <Accordion client:visible items={websiteFaq} />
+    </div>
+  </section>
+</BaseLayout>

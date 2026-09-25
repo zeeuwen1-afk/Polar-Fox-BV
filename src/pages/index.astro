@@ -2,12 +2,77 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Marquee from '../components/Marquee.astro';
 import Sticker from '../components/Sticker.astro';
+import Placeholder from '../components/Placeholder.astro';
+import CardStack from '../islands/CardStack';
+import FeatureSwitches from '../islands/FeatureSwitches';
+import WorkflowCards from '../islands/WorkflowCards';
+import ExitToggle from '../islands/ExitToggle';
+import FlipCards from '../islands/FlipCards';
+import SlotPicker from '../islands/SlotPicker';
+import { cases } from '../content/cases';
+import { homeFaq } from '../content/faq';
+import { lowestMonthly } from '../content/packages';
 import { copy, marqueeItems, site } from '../content/site';
+import { formatEuro } from '../lib/pricing';
 
-/**
- * Homepage. In fase 1 alleen de hero en de lopende band; de overige secties
- * (bewijs, functies, werkwijze, exit, FAQ, dagdeelkiezer) volgen in fase 4.
- */
+const stackCards = [
+  {
+    id: 'apps',
+    title: 'Applicaties',
+    price: `vanaf ${formatEuro(lowestMonthly('apps'))} p/m`,
+    href: '/applicaties',
+    tone: 'lime',
+    description: 'Klantportalen, boekingen, dashboards, ledenomgevingen.',
+  },
+  {
+    id: 'websites',
+    title: 'Websites',
+    price: `vanaf ${formatEuro(lowestMonthly('websites'))} p/m`,
+    href: '/websites',
+    tone: 'pink',
+    description: 'Snel, vindbaar, toegankelijk en zelf te beheren.',
+  },
+  {
+    id: 'beheer',
+    title: 'Beheer',
+    price: `vanaf ${formatEuro(lowestMonthly('beheer'))} p/m`,
+    href: '/prijzen',
+    tone: 'sky',
+    description: 'Hosting, updates, back-ups en bewaking van wat je al hebt.',
+  },
+] as const;
+
+// Op de homepage vier stappen: ontwerpen en bouwen zijn samengevoegd.
+const homeSteps = [
+  {
+    number: '01',
+    title: 'Intake op locatie',
+    short: 'We komen langs, kijken mee op de werkvloer en spreken de mensen die ermee gaan werken.',
+    duration: 'Gratis, 1 à 2 uur',
+    tone: 'lime',
+  },
+  {
+    number: '02',
+    title: 'Voorstel',
+    short: 'Een voorstel met een vaste prijs. Geen verrassingen achteraf.',
+    duration: 'Binnen 5 werkdagen',
+    tone: 'pink',
+  },
+  {
+    number: '03',
+    title: 'Ontwerpen en bouwen',
+    short: 'Eerst een klikbaar prototype, daarna bouwen met elke week een demo.',
+    duration: '2 tot 10 weken',
+    tone: 'sky',
+  },
+  {
+    number: '04',
+    title: 'Live en beheer',
+    short: 'Hosting, updates, back-ups en doorontwikkeling. Eén vast aanspreekpunt.',
+    duration: 'Vast bedrag per maand',
+    tone: 'sun',
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -15,44 +80,145 @@ import { copy, marqueeItems, site } from '../content/site';
   titleIsFull
   description={site.description}
 >
+  <!-- 1. Hero -->
   <section class="container-site pt-12 pb-8 md:pt-20">
-    <div class="max-w-4xl">
-      <Sticker color="pink" tilt={-3} wobble>
-        Intake bij jou op locatie
-      </Sticker>
-      <h1 class="mt-6">
-        {copy.promise}
-        <br />
-        <span class="mark-lime">{copy.promiseMark}</span>
-      </h1>
-      <p class="mt-8 max-w-2xl text-xl md:text-2xl">{copy.subline}</p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a href="/intake" class="btn btn-ink btn-shadow-pink text-lg">
-          Plan een intake
-        </a>
-        <a href="/prijzen" class="btn text-lg">
-          Bekijk de prijzen
-        </a>
+    <div class="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+      <div class="max-w-4xl">
+        <Sticker color="pink" tilt={-3} wobble>
+          Intake bij jou op locatie
+        </Sticker>
+        <h1 class="mt-6">
+          {copy.promise}
+          <br />
+          <span class="mark-lime">{copy.promiseMark}</span>
+        </h1>
+        <p class="mt-8 max-w-2xl text-xl md:text-2xl">{copy.subline}</p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/intake" class="btn btn-ink btn-shadow-pink text-lg">
+            Plan een intake
+          </a>
+          <a href="/prijzen" class="btn text-lg">
+            Bekijk de prijzen
+          </a>
+        </div>
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-bold">
+          {['Hosting in de EU', 'Voorstel binnen 5 werkdagen', 'Stop je? Neem alles mee.'].map(
+            (item) => (
+              <li class="flex items-center gap-2">
+                <span class="inline-block h-3.5 w-3.5 rounded-full border-[3px] border-ink bg-lime" />
+                {item}
+              </li>
+            ),
+          )}
+        </ul>
       </div>
-      <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-bold">
-        {['Hosting in de EU', 'Voorstel binnen 5 werkdagen', 'Stop je? Neem alles mee.'].map(
-          (item) => (
-            <li class="flex items-center gap-2">
-              <span class="inline-block h-3.5 w-3.5 rounded-full border-[3px] border-ink bg-lime" />
-              {item}
-            </li>
-          ),
-        )}
-      </ul>
+      <div class="flex lg:justify-end">
+        <CardStack client:idle cards={stackCards} />
+      </div>
     </div>
   </section>
 
+  <!-- 2. Lopende band -->
   <Marquee />
 
-  <section class="container-site py-8">
-    <h2 class="sr-only">Wat we bouwen</h2>
-    <p class="max-w-2xl text-lg">
-      Wat we bouwen: {marqueeItems.join(', ').toLowerCase()}. {copy.personal}
-    </p>
+  <!-- 3. Bewijs -->
+  <section class="container-site py-12 md:py-20" aria-labelledby="bewijs">
+    <h2 id="bewijs">{copy.proofTitle}</h2>
+    <p class="mt-4 max-w-2xl text-xl">{copy.proofText}</p>
+    <p class="sr-only">Wat we bouwen: {marqueeItems.join(', ').toLowerCase()}.</p>
+    <div class="mt-10 grid gap-8 md:grid-cols-2">
+      {cases.map((item) => (
+        <a
+          href={`/cases#${item.id}`}
+          class:list={[
+            'card-lg group relative flex flex-col gap-5 p-6 no-underline md:p-8',
+            item.tone === 'lime' ? 'bg-lime' : 'bg-pink',
+          ]}
+        >
+          <Sticker color="paper" tilt={3} class="absolute -top-4 left-6">
+            <span aria-hidden="true" class="h-2.5 w-2.5 rounded-full bg-lime" /> live
+          </Sticker>
+          <Placeholder
+            label={`Schermafbeelding ${item.name}`}
+            lines={item.demoLines}
+            tone="paper"
+          />
+          <div>
+            <h3 class="text-3xl">{item.name}</h3>
+            <p class="mt-1 text-sm font-bold uppercase tracking-wide">
+              {item.kind} · {item.sector}
+            </p>
+            <p class="mt-3 text-lg">{item.summary}</p>
+            <span class="mt-4 inline-flex items-center gap-2 font-bold group-hover:underline">
+              Bekijk de case <span aria-hidden="true">→</span>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 4. Functieschakelaars -->
+  <section class="on-ink bg-ink py-16 text-paper md:py-24" aria-labelledby="functies">
+    <div class="container-site">
+      <h2 id="functies" class="text-paper">
+        Zet aan wat je <span class="mark-lime">nodig hebt.</span>
+      </h2>
+      <p class="mt-4 max-w-2xl text-xl text-paper/85">
+        Kies website of app, zet functies aan en zie meteen in welke richting je pakket gaat.
+      </p>
+      <div class="mt-10">
+        <FeatureSwitches client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Werkwijze -->
+  <section class="container-site py-16 md:py-24" aria-labelledby="werkwijze">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <h2 id="werkwijze">Zo werkt het.</h2>
+      <a href="/werkwijze" class="btn self-start">
+        Alles over onze werkwijze
+      </a>
+    </div>
+    <div class="mt-10">
+      <WorkflowCards client:visible steps={homeSteps} />
+    </div>
+  </section>
+
+  <!-- 6. Blijven of stoppen -->
+  <section class="container-site pb-16 md:pb-24" aria-labelledby="exit">
+    <h2 id="exit" class="sr-only">
+      Blijf je of stop je?
+    </h2>
+    <ExitToggle client:visible />
+    <p class="mt-6 max-w-2xl">{copy.exit}</p>
+  </section>
+
+  <!-- 7. FAQ -->
+  <section class="bg-stone py-16 md:py-24" aria-labelledby="faq">
+    <div class="container-site">
+      <h2 id="faq">
+        Veelgestelde <span class="mark-pink">vragen.</span>
+      </h2>
+      <div class="mt-10">
+        <FlipCards client:visible items={homeFaq} />
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Dagdeel kiezen -->
+  <section class="container-site py-16 md:py-24" aria-labelledby="dagdeel">
+    <div class="card-lg bg-pink p-6 md:p-10">
+      <h2 id="dagdeel">
+        Kies alvast een <span class="mark-lime">dagdeel.</span>
+      </h2>
+      <p class="mt-4 max-w-2xl text-xl">
+        {copy.personal} Kies een dagdeel dat je uitkomt; de rest regelen we in de aanvraag.
+      </p>
+      <div class="mt-8">
+        <SlotPicker client:visible />
+      </div>
+    </div>
   </section>
 </BaseLayout>

@@ -26,7 +26,7 @@ export default function CardStack({ cards }: CardStackProps) {
   const topCard = cards[top];
 
   return (
-    <div className="flex flex-col items-center gap-6 md:items-end">
+    <div className="flex w-full max-w-[460px] flex-col items-center gap-6 md:items-end">
       <div className="cardstack" data-testid="cardstack">
         {cards.map((card, index) => {
           // Positie 0 ligt bovenop; de rest schuift erachter.

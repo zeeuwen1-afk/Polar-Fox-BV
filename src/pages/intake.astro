@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sticker from '../components/Sticker.astro';
+import IntakeWizard from '../islands/IntakeWizard';
+import { site } from '../content/site';
+
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const apiUrl = import.meta.env.PUBLIC_INTAKE_API_URL || '/api/intake';
+
+const tiles = [
+  { title: '1 à 2 uur', text: 'Zo lang duurt een intake op locatie. Gratis en vrijblijvend.' },
+  { title: 'Binnen 5 werkdagen', text: 'Daarna krijg je een voorstel met een vaste prijs.' },
+  { title: 'Liever direct contact?', text: '', contact: true },
+];
+---
+
+<BaseLayout
+  title="Plan een intake"
+  description="Vraag een gratis intake op locatie aan. In vier korte stappen vertel je wat je nodig hebt; wij komen langs en sturen binnen 5 werkdagen een voorstel."
+>
+  <section class="container-site pt-12 pb-8 md:pt-16">
+    <Sticker color="pink" tilt={-3} wobble>
+      Gratis, bij jou op locatie
+    </Sticker>
+    <h1 class="mt-6">
+      Plan een <span class="mark-lime">intake.</span>
+    </h1>
+    <p class="mt-6 max-w-2xl text-xl md:text-2xl">
+      Vier korte stappen. We bevestigen binnen één werkdag en komen langs op een moment dat jou
+      uitkomt.
+    </p>
+  </section>
+
+  <section class="container-site py-8" aria-label="Intakeformulier">
+    <IntakeWizard
+      client:load
+      turnstileSiteKey={turnstileSiteKey}
+      apiUrl={apiUrl}
+      privacyHref="/juridisch/privacyverklaring"
+    />
+  </section>
+
+  <section class="container-site py-12 md:py-16" aria-label="Goed om te weten">
+    <ul class="grid gap-5 md:grid-cols-3">
+      {tiles.map((tile) => (
+        <li class="card flex flex-col gap-2 p-5">
+          <h2 class="text-2xl">{tile.title}</h2>
+          {tile.contact ? (
+            <p class="flex flex-col gap-1">
+              <a href={`mailto:${site.email}`} class="font-bold underline underline-offset-4">
+                {site.email}
+              </a>
+              <a href={site.phoneHref} class="font-bold underline underline-offset-4">
+                {site.phone}
+              </a>
+            </p>
+          ) : (
+            <p>{tile.text}</p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

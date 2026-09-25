@@ -1,0 +1,74 @@
+---
+import Sticker from './Sticker.astro';
+import type { Package, PackageGroup } from '../content/packages';
+import { formatEuro, yearlyMonthly } from '../lib/pricing';
+
+/**
+ * Pakketkaart. Beide maandbedragen staan in de HTML; de BillingToggle zet
+ * `data-billing="yearly"` op <html> en CSS toont dan het jaarbedrag
+ * (zie .price-monthly / .price-yearly in global.css).
+ */
+interface Props {
+  pkg: Package;
+  group: PackageGroup;
+}
+
+const { pkg, group } = Astro.props;
+const yearly = yearlyMonthly(pkg.monthly);
+const intakeKind = group.id === 'websites' ? 'website' : group.id === 'apps' ? 'app' : 'beheer';
+
+let upfront: string;
+if (pkg.start !== undefined) {
+  upfront = `${pkg.startFrom ? 'Startbijdrage vanaf' : 'Startbijdrage'} ${formatEuro(pkg.start)}`;
+} else if (group.checkFee !== undefined) {
+  upfront = `Na een overname-check van ${formatEuro(group.checkFee)}`;
+} else {
+  upfront = 'Geen startbijdrage';
+}
+---
+
+<article
+  class:list={[
+    'card-lg relative flex h-full flex-col p-6 md:p-7',
+    pkg.recommended ? 'bg-lime' : 'bg-paper',
+  ]}
+  data-package={pkg.id}
+>
+  {pkg.recommended && (
+    <Sticker color="pink" tilt={3} class="absolute -top-4 right-5">
+      Onze aanrader
+    </Sticker>
+  )}
+  <h3 class="text-2xl">{pkg.name}</h3>
+  <p class="mt-4">
+    <span class="price-monthly text-4xl font-bold tracking-tight" data-testid={`${pkg.id}-monthly`}>
+      {formatEuro(pkg.monthly)}
+    </span>
+    <span class="price-yearly text-4xl font-bold tracking-tight" data-testid={`${pkg.id}-yearly`}>
+      {formatEuro(yearly)}
+    </span>
+    <span class="text-lg font-bold"> p/m</span>
+    <span class="block text-sm">
+      excl. btw<span class="price-yearly">, bij jaarbetaling</span>
+    </span>
+  </p>
+  <p class="mt-3 font-bold">{upfront}</p>
+  <p class="text-sm">Urenbudget: {pkg.hours}</p>
+  <ul class="mt-5 flex flex-col gap-2 border-t-[3px] border-ink pt-5">
+    {pkg.features.map((feature) => (
+      <li class="flex items-start gap-2">
+        <span
+          aria-hidden="true"
+          class="mt-1.5 inline-block h-3 w-3 shrink-0 rounded-full border-[3px] border-ink bg-paper"
+        />
+        <span>{feature}</span>
+      </li>
+    ))}
+  </ul>
+  <a
+    href={`/intake?soort=${intakeKind}`}
+    class:list={['btn mt-auto pt-3', pkg.recommended ? 'btn-ink' : '']}
+  >
+    Bespreek {pkg.name}
+  </a>
+</article>

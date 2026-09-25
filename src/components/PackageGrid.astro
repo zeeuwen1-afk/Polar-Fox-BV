@@ -1,0 +1,30 @@
+---
+import PackageCard from './PackageCard.astro';
+import type { PackageGroup } from '../content/packages';
+
+/**
+ * Alle kaarten van één pakketgroep, met de looptijdtoelichting eronder.
+ */
+interface Props {
+  group: PackageGroup;
+  headingLevel?: 'h2' | 'h3';
+  showTitle?: boolean;
+}
+
+const { group, headingLevel = 'h2', showTitle = true } = Astro.props;
+const Heading = headingLevel;
+const columns = group.items.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3';
+---
+
+<div>
+  {showTitle && <Heading class="mb-8">{group.title}</Heading>}
+  <div class:list={['grid gap-6 pt-4', columns]}>
+    {group.items.map((pkg) => (
+      <PackageCard pkg={pkg} group={group} />
+    ))}
+  </div>
+  <p class="mt-6 text-sm">
+    Minimale looptijd {group.minTermMonths} maanden, daarna maandelijks opzegbaar. Alle prijzen
+    excl. btw.
+  </p>
+</div>

@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Placeholder from '../components/Placeholder.astro';
+import Sticker from '../components/Sticker.astro';
+import CaseTabs from '../islands/CaseTabs';
+import { cases } from '../content/cases';
+import { packages } from '../content/packages';
+import { copy } from '../content/site';
+import { formatEuro } from '../lib/pricing';
+---
+
+<BaseLayout
+  title="Cases"
+  description="Twee platforms die we zelf bouwen en dagelijks draaien: HPP-Dashboard voor de horeca en YogaCompany.eu voor yoga-opleidingen. Geen beloftes, draaiende software."
+>
+  <PageHero
+    sticker="Cases"
+    stickerColor="lime"
+    subline={`${copy.proofText} Dit is wat we bouwen en beheren.`}
+  >
+    Gebouwd. In gebruik. <span class="mark-pink">Elke dag.</span>
+  </PageHero>
+
+  <div class="container-site flex flex-col gap-12 pb-12">
+    {cases.map((item) => (
+      <article
+        id={item.id}
+        class:list={[
+          'card-lg scroll-mt-24 p-6 md:p-10',
+          item.tone === 'lime' ? 'bg-lime' : 'bg-pink',
+        ]}
+        aria-labelledby={`case-${item.id}`}
+      >
+        <div class="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
+          <div>
+            <Sticker color="paper" tilt={-2}>
+              <span aria-hidden="true" class="h-2.5 w-2.5 rounded-full bg-lime" /> live
+            </Sticker>
+            <h2 id={`case-${item.id}`} class="mt-4">
+              {item.name}
+            </h2>
+            <p class="mt-2 text-sm font-bold uppercase tracking-wide">
+              {item.kind} · {item.sector}
+            </p>
+            <div class="mt-6">
+              <CaseTabs client:visible tabs={item.tabs} name={item.name} />
+            </div>
+            <a href={item.url} rel="noopener" target="_blank" class="btn btn-ink mt-6">
+              Naar {item.urlLabel} <span class="sr-only">(opent in een nieuw tabblad)</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <Placeholder
+            label={`Schermafbeelding ${item.name}`}
+            lines={item.demoLines}
+            tone="paper"
+            class="self-start"
+          />
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <section
+    class="container-site grid gap-6 pb-16 md:grid-cols-2 md:pb-24"
+    aria-label="Jouw project"
+  >
+    <div class="card-lg bg-lime p-6 md:p-8">
+      <h2 class="text-3xl md:text-4xl">Jouw project hier?</h2>
+      <p class="mt-3 text-lg">
+        {copy.promo}{' '}
+        <a
+          href="/juridisch/algemene-voorwaarden#actievoorwaarden"
+          class="underline underline-offset-4"
+        >
+          Actievoorwaarden
+        </a>
+        .
+      </p>
+      <a href="/intake" class="btn btn-ink mt-6">
+        Plan een intake
+      </a>
+    </div>
+    <div class="flex flex-col rounded-[28px] border-[3px] border-dashed border-ink p-6 md:p-8">
+      <h2 class="text-3xl md:text-4xl">Vastgelopen app?</h2>
+      <p class="mt-3 text-lg">
+        Gebouwd met Lovable, Bolt of een bureau dat niet meer reageert? We doen een overname-check
+        van {formatEuro(packages.beheer.checkFee)} excl. btw en vertellen eerlijk wat er nodig is.
+      </p>
+      <a href="/intake?soort=beheer" class="btn mt-auto self-start pt-3">
+        Laat je app beoordelen
+      </a>
+    </div>
+  </section>
+</BaseLayout>

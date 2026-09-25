@@ -30,10 +30,15 @@
   --shadow-hard-lime: var(--shadow-sm-lime);
   --shadow-hard-lg-lime: var(--shadow-lg-lime);
 
+  /* Alle breekpunten in px en de standaardset gewist: Tailwind kan rem en px
+     niet samen sorteren, waardoor sm: anders over lg: heen zou winnen. */
+  --breakpoint-*: initial;
   --breakpoint-xs: 390px;
+  --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1440px;
+  --breakpoint-2xl: 1536px;
 }
 
 @layer base {
@@ -365,5 +370,99 @@
   }
   .skiplink:focus {
     top: 1rem;
+  }
+}
+
+/* --- Jaar-/maandprijs: BillingToggle zet data-billing op <html> --- */
+@layer components {
+  .price-yearly {
+    display: none;
+  }
+  :root[data-billing='yearly'] .price-yearly {
+    display: inline;
+  }
+  :root[data-billing='yearly'] .price-monthly {
+    display: none;
+  }
+
+  /* --- Juridische Markdown --- */
+  .prose-legal {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+  .prose-legal h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-legal h3 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-legal p,
+  .prose-legal ul,
+  .prose-legal ol {
+    margin-bottom: 1rem;
+  }
+  .prose-legal ul,
+  .prose-legal ol {
+    padding-left: 1.5rem;
+  }
+  .prose-legal ul {
+    list-style: disc;
+  }
+  .prose-legal ol {
+    list-style: decimal;
+  }
+  .prose-legal li {
+    margin-bottom: 0.4rem;
+  }
+  .prose-legal a {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .prose-legal table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+  }
+  .prose-legal th,
+  .prose-legal td {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    vertical-align: top;
+    border-top: 2px solid var(--ink);
+  }
+  .prose-legal thead th {
+    background: var(--ink);
+    color: var(--paper);
+    border-top: 0;
+  }
+  /* Blokken [TE CONTROLEREN DOOR JURIST] staan als blockquote in de Markdown. */
+  .prose-legal blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border: var(--border);
+    border-radius: 12px;
+    background: var(--sun);
+    box-shadow: var(--shadow-sm);
+  }
+  .prose-legal blockquote p {
+    margin: 0;
+  }
+  .prose-legal code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.9em;
+    background: var(--stone);
+    padding: 0 4px;
+    border-radius: 4px;
   }
 }

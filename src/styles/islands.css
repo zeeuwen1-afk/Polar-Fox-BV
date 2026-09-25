@@ -9,8 +9,10 @@
 .cardstack {
   position: relative;
   aspect-ratio: 4 / 3;
-  width: 100%;
-  max-width: 460px;
+  /* De achterste kaart steekt 32 px naar rechts en 28 px omlaag uit, en de
+     draaiing steekt links en rechts een paar pixels uit; daar houden we ruimte voor. */
+  width: calc(100% - 56px);
+  margin: 12px 40px 36px 16px;
 }
 .cardstack-card {
   position: absolute;

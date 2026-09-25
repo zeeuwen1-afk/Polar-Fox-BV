@@ -1,0 +1,42 @@
+---
+import Sticker from './Sticker.astro';
+
+/**
+ * Kop van een pagina: sticker, H1 (via de default slot, zodat een woord
+ * gemarkeerd kan worden) en onderregel. Optioneel een blok rechts via slot "aside".
+ */
+interface Props {
+  sticker: string;
+  stickerColor?: 'paper' | 'lime' | 'pink' | 'sky' | 'sun';
+  subline?: string;
+  class?: string;
+}
+
+const { sticker, stickerColor = 'pink', subline, class: className = '' } = Astro.props;
+const hasAside = Astro.slots.has('aside');
+---
+
+<section class:list={['container-site pt-12 pb-10 md:pt-20 md:pb-14', className]}>
+  <div
+    class:list={[
+      'grid gap-10',
+      hasAside && 'lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-center',
+    ]}
+  >
+    <div class="min-w-0 max-w-4xl">
+      <Sticker color={stickerColor} tilt={-3} wobble>
+        {sticker}
+      </Sticker>
+      <h1 class="mt-6">
+        <slot />
+      </h1>
+      {subline && <p class="mt-8 max-w-2xl text-xl md:text-2xl">{subline}</p>}
+      <slot name="after" />
+    </div>
+    {hasAside && (
+      <div class="min-w-0 lg:justify-self-end">
+        <slot name="aside" />
+      </div>
+    )}
+  </div>
+</section>

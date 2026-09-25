@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PackageGrid from '../components/PackageGrid.astro';
+import Sticker from '../components/Sticker.astro';
+import BillingToggle from '../islands/BillingToggle';
+import TotalCalculator from '../islands/TotalCalculator';
+import { alwaysIncluded, packageGroups, packages } from '../content/packages';
+import { copy } from '../content/site';
+import { formatEuro } from '../lib/pricing';
+
+const { hourlyRate, tenHourCard } = packages.extras;
+---
+
+<BaseLayout
+  title="Prijzen"
+  description="Vaste maandbedragen voor websites, applicaties en beheer, excl. btw. Startbijdrage plus maandbedrag, alles inbegrepen: bouw, hosting, onderhoud en uren."
+>
+  <PageHero
+    sticker="Prijzen"
+    stickerColor="sun"
+    subline="Een startbijdrage en een vast maandbedrag. Daarin zit alles: ontwerp, bouw, hosting, onderhoud en een urenbudget. Alle prijzen excl. btw."
+  >
+    Alles is maatwerk. <span class="mark-lime">De prijs niet.</span>
+    <div slot="aside" class="card-lg bg-paper p-6">
+      <BillingToggle client:idle />
+    </div>
+  </PageHero>
+
+  {packageGroups.map((group) => (
+    <section class="container-site py-10 md:py-14" aria-labelledby={`groep-${group.id}`}>
+      <h2 id={`groep-${group.id}`} class="sr-only">
+        {group.title}
+      </h2>
+      <PackageGrid group={group} />
+    </section>
+  ))}
+
+  <section class="container-site py-12 md:py-20" aria-labelledby="rekenen">
+    <h2 id="rekenen">
+      Wat kost het <span class="mark-pink">in totaal?</span>
+    </h2>
+    <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-12">
+      <TotalCalculator client:visible />
+      <div class="flex flex-col gap-8">
+        <div>
+          <Sticker color="lime" tilt={-2}>
+            Altijd inbegrepen
+          </Sticker>
+          <ul class="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            {alwaysIncluded.map((item) => (
+              <li class="flex items-center gap-2 font-bold">
+                <span
+                  class="inline-block h-3 w-3 shrink-0 rounded-full border-[3px] border-ink bg-lime"
+                  aria-hidden="true"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <dl class="flex flex-col gap-4 rounded-[18px] border-[3px] border-ink bg-stone p-5 md:p-6">
+          <div>
+            <dt class="font-bold">Extra uren</dt>
+            <dd class="m-0">
+              {formatEuro(hourlyRate)} per uur, of een strippenkaart van 10 uur voor{' '}
+              {formatEuro(tenHourCard)}. Excl. btw.
+            </dd>
+          </div>
+          <div>
+            <dt class="font-bold">Eerder stoppen</dt>
+            <dd class="m-0">
+              Binnen de minimale looptijd betaal je 50% van de resterende maandbedragen. Daarna
+              maandelijks opzegbaar.
+            </dd>
+          </div>
+          <div>
+            <dt class="font-bold">Van jou</dt>
+            <dd class="m-0">
+              Domein, content en data zijn altijd van jou. Na de looptijd krijg je op verzoek de
+              broncode.
+            </dd>
+          </div>
+        </dl>
+        <p class="text-sm">
+          {copy.promo}
+          <a
+            href="/juridisch/algemene-voorwaarden#actievoorwaarden"
+            class="underline underline-offset-4"
+          >
+            Actievoorwaarden
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sticker from '../components/Sticker.astro';
+import { site } from '../content/site';
+
+const features = [
+  {
+    title: 'Urenbudget',
+    text: 'Zie hoeveel uren je deze maand nog hebt en waar ze aan besteed zijn.',
+  },
+  { title: 'Verzoeken', text: 'Dien wijzigingen in en volg de status, zonder mailtjes zoeken.' },
+  { title: 'Facturen', text: 'Alle facturen op één plek, direct te downloaden.' },
+];
+---
+
+<BaseLayout
+  title="Inloggen"
+  description="Het klantportaal Mijn Polar Fox is binnenkort beschikbaar: urenbudget, verzoeken en facturen op één plek."
+  noindex
+>
+  <section class="container-site pt-12 pb-16 md:pt-20 md:pb-24">
+    <Sticker color="sun" tilt={-2}>
+      Binnenkort
+    </Sticker>
+    <h1 class="mt-6">
+      Mijn <span class="mark-lime">Polar Fox.</span>
+    </h1>
+    <p class="mt-6 max-w-2xl text-xl md:text-2xl">
+      Klanten loggen hier binnenkort in op hun eigen portaal. Tot die tijd regelen we alles
+      persoonlijk: mail naar
+      <a href={`mailto:${site.email}`} class="underline underline-offset-4">
+        {site.email}
+      </a>
+      of bel{' '}
+      <a href={site.phoneHref} class="underline underline-offset-4">
+        {site.phone}
+      </a>
+      .
+    </p>
+    <ul class="mt-10 grid gap-5 md:grid-cols-3">
+      {features.map((item) => (
+        <li class="card flex flex-col gap-2 p-5">
+          <h2 class="text-2xl">{item.title}</h2>
+          <p>{item.text}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a href="/intake" class="btn btn-lime text-lg">
+        Nog geen klant? Plan een intake
+      </a>
+      <a href="/" class="btn text-lg">
+        Naar de homepage
+      </a>
+    </div>
+  </section>
+</BaseLayout>

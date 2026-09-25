@@ -1,0 +1,83 @@
+---
+import type { MarkdownInstance } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sticker from '../../components/Sticker.astro';
+import { site } from '../../content/site';
+
+/**
+ * Juridische pagina's uit src/content/juridisch/*.md. De bestandsnaam is de URL.
+ * Blokken [TE CONTROLEREN DOOR JURIST] staan als blockquote in de Markdown en
+ * worden opvallend geel weergegeven (zie .prose-legal in global.css).
+ */
+interface Frontmatter {
+  title: string;
+  description: string;
+  updated: string;
+  /** Pad naar een downloadbare pdf onder public/, als die er is. */
+  download?: string;
+  downloadLabel?: string;
+}
+
+const pages = import.meta.glob<MarkdownInstance<Frontmatter>>('../../content/juridisch/*.md', {
+  eager: true,
+});
+
+export function getStaticPaths() {
+  const entries = import.meta.glob<MarkdownInstance<{ title: string }>>(
+    '../../content/juridisch/*.md',
+    { eager: true },
+  );
+  return Object.keys(entries).map((path) => ({
+    params: { slug: path.split('/').pop()?.replace(/\.md$/, '') ?? '' },
+  }));
+}
+
+const { slug } = Astro.params;
+const entry = Object.entries(pages).find(([path]) => path.endsWith(`/${slug}.md`))?.[1];
+if (!entry) throw new Error(`Juridische pagina niet gevonden: ${slug}`);
+const { Content, frontmatter } = entry;
+const updated = new Date(frontmatter.updated).toLocaleDateString('nl-NL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+  <section class="container-site pt-12 pb-8 md:pt-16">
+    <Sticker color="sky" tilt={-2}>
+      Juridisch
+    </Sticker>
+    <h1 class="mt-6 text-4xl break-words md:text-6xl">{frontmatter.title}</h1>
+    <p class="mt-4 text-sm">Laatst gewijzigd op {updated}.</p>
+    {frontmatter.download && (
+      <a href={frontmatter.download} class="btn mt-6" download>
+        {frontmatter.downloadLabel ?? 'Download als pdf'}
+      </a>
+    )}
+  </section>
+
+  <section class="container-site pb-16 md:pb-24">
+    <div class="grid gap-10 lg:grid-cols-[1fr_320px]">
+      <div class="prose-legal max-w-3xl">
+        <Content />
+      </div>
+      <aside class="card self-start bg-stone p-5 text-sm" aria-label="Bedrijfsgegevens">
+        <p class="font-bold">{site.legalName}</p>
+        <p>{site.city}</p>
+        <p>KvK {site.kvk}</p>
+        <p>Btw {site.btw}</p>
+        <p>
+          <a href={`mailto:${site.email}`} class="underline underline-offset-4">
+            {site.email}
+          </a>
+        </p>
+        <p>
+          <a href={site.phoneHref} class="underline underline-offset-4">
+            {site.phone}
+          </a>
+        </p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
