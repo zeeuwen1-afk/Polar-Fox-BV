@@ -26,7 +26,7 @@ INTAKE_FROM_NAME = "Polar Fox"
 # Maak de namespace aan met `wrangler kv namespace create RATE_LIMIT` en vul het id in.
 [[kv_namespaces]]
 binding = "RATE_LIMIT"
-id = "VUL_IN_NA_WRANGLER_KV_NAMESPACE_CREATE"
+id = "bd546bcf6a984deda0f93cfdf1042d4f"
 
 [observability]
 enabled = true
@@ -41,4 +41,4 @@ INTAKE_FROM_EMAIL = "info@polarfoxbv.nl"
 INTAKE_FROM_NAME = "Polar Fox (preview)"
 [[env.preview.kv_namespaces]]
 binding = "RATE_LIMIT"
-id = "VUL_IN_NA_WRANGLER_KV_NAMESPACE_CREATE"
+id = "d028207fc940470da65bc0281d8ab7c8"
