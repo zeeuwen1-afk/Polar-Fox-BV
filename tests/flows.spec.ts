@@ -103,6 +103,7 @@ test('IntakeWizard doorloopt vier stappen en toont "Aangevraagd!"', async ({ pag
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
   });
   await page.goto('/intake?dagdeel=wo-middag');
+  await hydrated(page, 'form[novalidate]');
 
   await expect(
     page.getByRole('heading', { level: 2, name: 'Wat wil je laten maken?' }),
@@ -125,6 +126,8 @@ test('IntakeWizard doorloopt vier stappen en toont "Aangevraagd!"', async ({ pag
   await page.getByRole('button', { name: /Volgende/ }).click();
 
   await expect(page.getByRole('heading', { level: 2, name: 'Hoe bereiken we je?' })).toBeVisible();
+  // Bij aankomst op stap 4 mag nog geen enkel veld een foutmelding tonen.
+  await expect(page.getByRole('alert')).toHaveCount(0);
   await page.getByLabel('Je naam').fill('Testpersoon');
   await page.getByLabel('E-mailadres').fill('test@example.com');
   await label(page, 'Ik ga akkoord').click();
@@ -151,6 +154,7 @@ test('IntakeWizard houdt invoer vast bij een serverfout', async ({ page }) => {
     route.fulfill({ status: 502, contentType: 'application/json', body: '{"ok":false}' }),
   );
   await page.goto('/intake');
+  await hydrated(page, 'form[novalidate]');
   await label(page, 'Een website').click();
   await page.getByRole('button', { name: /Volgende/ }).click();
   await page.getByRole('button', { name: /Volgende/ }).click();

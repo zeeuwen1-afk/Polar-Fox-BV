@@ -569,12 +569,15 @@ export default function IntakeWizard({ turnstileSiteKey, apiUrl, privacyHref }: 
           ) : (
             <span />
           )}
+          {/* Eigen key per knop: anders hergebruikt React hetzelfde element en wordt
+              de klik op "Volgende" nog als submit afgehandeld zodra het type wisselt. */}
           {step < LAST_STEP ? (
-            <button type="button" className="btn btn-lime" onClick={goNext}>
+            <button key="volgende" type="button" className="btn btn-lime" onClick={goNext}>
               Volgende <span aria-hidden="true">→</span>
             </button>
           ) : (
             <button
+              key="versturen"
               type="submit"
               className="btn btn-lime"
               disabled={status === 'submitting'}
